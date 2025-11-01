@@ -539,31 +539,48 @@ class EnhancedMedicalAnalyzer:
             point_cloud, segmentation, baseline_data
         )
 
-        # Run comprehensive condition analysis
-        comprehensive_conditions = self.comprehensive_analyzer.analyze_all_conditions(
-            point_cloud, segmentation, temperature_map, pressure_map
-        )
-
-        # Extract features for ML models
-        features = self.feature_extractor.extract_features(point_cloud, segmentation)
-        feature_values = dict(zip(
-            self.feature_extractor.feature_names,
-            features.flatten()
-        ))
-
-        # Run ensemble predictions for all conditions
-        try:
-            ensemble_result = self.diagnostic_ensemble.predict_all_conditions(
-                features, feature_values
+        # Run comprehensive condition analysis (skip on Streamlit Cloud for speed)
+        if not self.is_streamlit_cloud:
+            comprehensive_conditions = self.comprehensive_analyzer.analyze_all_conditions(
+                point_cloud, segmentation, temperature_map, pressure_map
             )
-        except Exception as e:
-            logger.warning(f"Ensemble prediction failed: {e}")
+        else:
+            # Fast mode: skip comprehensive analysis, use only traditional
+            logger.info("Streamlit Cloud fast mode: skipping comprehensive condition analysis")
+            comprehensive_conditions = {}
+
+        # Extract features for ML models (skip on Streamlit Cloud for speed)
+        if not self.is_streamlit_cloud:
+            features = self.feature_extractor.extract_features(point_cloud, segmentation)
+            feature_values = dict(zip(
+                self.feature_extractor.feature_names,
+                features.flatten()
+            ))
+
+            # Run ensemble predictions for all conditions
+            try:
+                ensemble_result = self.diagnostic_ensemble.predict_all_conditions(
+                    features, feature_values
+                )
+            except Exception as e:
+                logger.warning(f"Ensemble prediction failed: {e}")
+                ensemble_result = EnsembleResult(
+                    predictions=[],
+                    overall_confidence=0.0,
+                    model_agreement=0.0,
+                    conflicting_diagnoses=[],
+                    recommended_actions=["Traditional analysis only - ensemble unavailable"],
+                    uncertainty_flags=[]
+                )
+        else:
+            # Streamlit Cloud fast mode: skip ML predictions
+            logger.info("Streamlit Cloud fast mode: skipping feature extraction and ensemble predictions")
             ensemble_result = EnsembleResult(
                 predictions=[],
                 overall_confidence=0.0,
                 model_agreement=0.0,
                 conflicting_diagnoses=[],
-                recommended_actions=["Traditional analysis only - ensemble unavailable"],
+                recommended_actions=["Fast mode - traditional analysis only"],
                 uncertainty_flags=[]
             )
 
