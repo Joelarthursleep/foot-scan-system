@@ -71,9 +71,13 @@ try:
     from features.foot_health_score import FootHealthScoreCalculator
     from export.insurance_report_generator import InsuranceReportGenerator
     ENHANCED_FEATURES_AVAILABLE = True
-    print("Enhanced AI Features Loaded Successfully!")
+    print("✓ Enhanced AI Features Loaded Successfully!")
 except ImportError as e:
-    print(f"Warning: Enhanced features not available: {e}")
+    import traceback
+    print(f"✗ Warning: Enhanced features not available")
+    print(f"Error: {e}")
+    print("Full traceback:")
+    traceback.print_exc()
     ENHANCED_FEATURES_AVAILABLE = False
 
 # Import medical research and ML modules
@@ -5353,8 +5357,12 @@ class FootScanSystemUI:
                     st.markdown("### Comprehensive Medical Condition Analysis")
                     st.markdown('<div class="info-box">Clinical-grade analysis with detailed medical justifications based on orthopedic research</div>', unsafe_allow_html=True)
 
+                    # Debug information for troubleshooting
+                    st.info(f"Enhanced AI Features Available: {ENHANCED_FEATURES_AVAILABLE}")
+
                     if ENHANCED_FEATURES_AVAILABLE:
                         try:
+                            st.info("Running Enhanced AI Analysis...")
                             enhanced_output = self._run_enhanced_analysis(
                                 foot_pair_data,
                                 patient_profile,
@@ -5366,9 +5374,15 @@ class FootScanSystemUI:
                                 previous_health_score=patient_context.get("previous_score"),
                                 patient_history_context=patient_context
                             )
+                            st.success("Enhanced AI Analysis completed successfully!")
                         except Exception as analyzer_error:
-                            st.warning(f"Enhanced analysis unavailable: {analyzer_error}")
+                            import traceback
+                            error_details = traceback.format_exc()
+                            st.error(f"Enhanced analysis failed: {analyzer_error}")
+                            st.expander("Error Details").code(error_details)
                             enhanced_output = None
+                    else:
+                        st.warning("Enhanced AI features are not available. Some advanced modules could not be imported.")
 
                     if enhanced_output is not None:
 
