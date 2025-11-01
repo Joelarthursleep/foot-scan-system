@@ -935,8 +935,16 @@ class FootScanSystemUI:
 
         # Enhanced analyzer
         if getattr(self, "enhanced_analyzer", None) is None:
-            self.enhanced_analyzer = EnhancedMedicalAnalyzer(site_id="streamlit_dashboard")
-            st.session_state['enhanced_analyzer'] = self.enhanced_analyzer
+            st.info("Loading Enhanced AI models (first time only - this may take 30-60 seconds)...")
+            try:
+                self.enhanced_analyzer = EnhancedMedicalAnalyzer(site_id="streamlit_dashboard")
+                st.session_state['enhanced_analyzer'] = self.enhanced_analyzer
+                st.success("Enhanced AI models loaded successfully!")
+            except Exception as e:
+                st.error(f"Failed to load Enhanced AI models: {e}")
+                import traceback
+                traceback.print_exc()
+                return False
         else:
             self.enhanced_analyzer = st.session_state.get('enhanced_analyzer', self.enhanced_analyzer)
 
@@ -1059,23 +1067,32 @@ class FootScanSystemUI:
         patient_history_context: Optional[Dict[str, Any]] = None
     ) -> Optional[Dict[str, Any]]:
         """Execute the full enhanced AI analysis pipeline for both feet."""
+
+        # Create progress indicator FIRST so we can show what's happening
+        import streamlit as st_progress
+        progress_placeholder = st_progress.empty()
+
+        progress_placeholder.info("Initializing Enhanced AI components...")
         if not self._ensure_enhanced_components():
+            progress_placeholder.error("Failed to initialize Enhanced AI components")
             return None
+        progress_placeholder.info("Enhanced AI components initialized successfully")
 
         combined_conditions: Dict[str, Any] = {}
         display_conditions: List[Dict[str, Any]] = []
         insurance_conditions: List[Dict[str, Any]] = []
         merged_risk_assessments: Dict[str, Any] = {}
+
+        progress_placeholder.info("Calculating regional metrics...")
         regional_metrics = self._derive_regional_metrics(
             foot_pair_data.get("left", {}).get("structure"),
             foot_pair_data.get("right", {}).get("structure")
         )
+        progress_placeholder.info("Regional metrics calculated")
+
         history_records: List[Dict[str, Any]] = []
         if patient_history_context:
             history_records = patient_history_context.get("history_records", []) or []
-
-        import streamlit as st_progress
-        progress_placeholder = st_progress.empty()
 
         for foot_side, key in [("Left", "left"), ("Right", "right")]:
             progress_placeholder.info(f"Processing {foot_side} foot...")
