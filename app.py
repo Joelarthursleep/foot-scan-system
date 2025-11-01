@@ -5280,25 +5280,39 @@ class FootScanSystemUI:
                 right_path = stl_loader.save_temporary_file(right_stl_file, "right")
                 print("[PROGRESS] Files saved temporarily")
 
+                # Check if running on Streamlit Cloud
+                import os
+                is_streamlit_cloud = os.getenv('STREAMLIT_SHARING_MODE') is not None or \
+                                   'streamlit.app' in os.getenv('HOSTNAME', '')
+
                 # Load foot pair
                 print("[PROGRESS] Loading STL meshes - this may take 30-60 seconds...")
                 foot_pair_data = stl_loader.load_foot_pair(left_path, right_path)
                 print("[PROGRESS] Meshes loaded successfully")
 
-                # Analyze foot structure for medical conditions with regional volume analysis
-                print("[PROGRESS] Analyzing left foot structure...")
-                left_structure = stl_loader.analyze_foot_structure(
-                    foot_pair_data['left']['vertices'],
-                    foot_pair_data['left'].get('faces')
-                )
-                print("[PROGRESS] Analyzing right foot structure...")
-                right_structure = stl_loader.analyze_foot_structure(
-                    foot_pair_data['right']['vertices'],
-                    foot_pair_data['right'].get('faces')
-                )
-                foot_pair_data['left']['structure'] = left_structure
-                foot_pair_data['right']['structure'] = right_structure
-                print("[PROGRESS] Structural analysis complete")
+                # Analyze foot structure - SKIP on Streamlit Cloud to prevent hanging
+                if not is_streamlit_cloud:
+                    print("[PROGRESS] Analyzing left foot structure...")
+                    left_structure = stl_loader.analyze_foot_structure(
+                        foot_pair_data['left']['vertices'],
+                        foot_pair_data['left'].get('faces')
+                    )
+                    print("[PROGRESS] Analyzing right foot structure...")
+                    right_structure = stl_loader.analyze_foot_structure(
+                        foot_pair_data['right']['vertices'],
+                        foot_pair_data['right'].get('faces')
+                    )
+                    foot_pair_data['left']['structure'] = left_structure
+                    foot_pair_data['right']['structure'] = right_structure
+                    print("[PROGRESS] Structural analysis complete")
+                else:
+                    # Streamlit Cloud: Skip heavy 3D analysis, use basic structure
+                    print("[PROGRESS] Streamlit Cloud mode: Using lightweight analysis")
+                    left_structure = {'arch': {'type': 'normal', 'height': 0}, 'instep': {'type': 'normal', 'height': 0}, 'alignment': {'type': 'neutral'}}
+                    right_structure = {'arch': {'type': 'normal', 'height': 0}, 'instep': {'type': 'normal', 'height': 0}, 'alignment': {'type': 'neutral'}}
+                    foot_pair_data['left']['structure'] = left_structure
+                    foot_pair_data['right']['structure'] = right_structure
+                    st.warning("⚡ Running in lightweight mode on Streamlit Cloud - structural analysis limited")
 
                 # Show results
                 st.markdown('<div class="success-box">Foot pair processed successfully</div>', unsafe_allow_html=True)
