@@ -418,6 +418,12 @@ class EnhancedMedicalAnalyzer:
     """Enhanced medical analyzer with advanced diagnostic capabilities"""
 
     def __init__(self, site_id: str = "foot_clinic_001"):
+        import os
+
+        # Check if running on Streamlit Cloud (limited resources)
+        self.is_streamlit_cloud = os.getenv('STREAMLIT_SHARING_MODE') is not None or \
+                                   'streamlit.app' in os.getenv('HOSTNAME', '')
+
         # Initialize traditional analyzers
         self.traditional_analyzer = ComprehensiveMedicalAnalyzer()
 
@@ -433,13 +439,18 @@ class EnhancedMedicalAnalyzer:
         # Initialize feature extractor
         self.feature_extractor = FeatureExtractor()
 
-        # Initialize ensemble models for each condition
-        self._initialize_ensemble_models()
+        # Skip ML training on Streamlit Cloud - use rule-based detection only
+        if not self.is_streamlit_cloud:
+            # Initialize ensemble models for each condition
+            self._initialize_ensemble_models()
 
-        # Generate synthetic training data (in production, use real data)
-        self._generate_training_data()
+            # Generate synthetic training data (in production, use real data)
+            self._generate_training_data()
+            logger.info("Enhanced Medical Analyzer initialized with ML models")
+        else:
+            logger.info("Enhanced Medical Analyzer initialized in fast mode (rule-based only, no ML training)")
 
-        logger.info("Enhanced Medical Analyzer initialized with comprehensive condition detection, risk assessment, and advanced AI capabilities")
+        logger.info("Enhanced Medical Analyzer ready with comprehensive condition detection, risk assessment, and AI capabilities")
 
     def _initialize_ensemble_models(self):
         """Initialize ensemble models for each medical condition"""
