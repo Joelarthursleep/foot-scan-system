@@ -1,11 +1,11 @@
 # Core web framework
 streamlit
 
-# Scientific computing - versions compatible with Python 3.13 binary wheels
-numpy<2.0.0
-pandas<2.0.0
-scipy<1.12.0
-scikit-learn<1.4.0
+# Scientific computing - versions with pre-built wheels for Python 3.11
+numpy==1.26.4
+pandas==2.2.3
+scipy==1.13.1
+scikit-learn==1.5.2
 
 # Visualization
 plotly
