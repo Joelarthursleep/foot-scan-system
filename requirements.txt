@@ -1,0 +1,53 @@
+# Core web framework
+streamlit==1.50.0
+
+# Scientific computing
+numpy==2.0.2
+pandas==2.3.3
+scipy==1.13.1
+scikit-learn==1.6.1
+
+# Visualization
+plotly==6.3.1
+matplotlib>=3.7.0
+
+# 3D mesh processing
+trimesh==4.9.0
+# Note: open3d and pyvista are heavy - only include if actively used
+# open3d>=0.17.0
+# pyvista>=0.40.0
+
+# Computer vision and image processing
+opencv-python-headless==4.12.0.88
+Pillow>=10.0.0
+
+# API framework
+fastapi==0.119.1
+uvicorn==0.38.0
+pydantic==2.12.3
+python-multipart>=0.0.6
+
+# HTTP requests
+requests==2.32.5
+
+# Database
+sqlalchemy>=2.0.0
+# psycopg2-binary only needed for PostgreSQL
+# psycopg2-binary>=2.9.0
+
+# File Processing
+h5py>=3.8.0
+
+# Utilities
+tqdm>=4.65.0
+python-dotenv>=1.0.0
+click>=8.1.0
+aiofiles>=23.0.0
+
+# Testing (optional for production)
+# pytest>=7.3.0
+# pytest-cov>=4.1.0
+
+# TensorFlow removed - not actively used in production
+# Use ONNX Runtime instead if models are converted
+# onnxruntime>=1.15.0

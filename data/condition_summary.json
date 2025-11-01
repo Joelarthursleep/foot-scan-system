@@ -1,0 +1,644 @@
+{
+  "metatarsalgia": {
+    "icd10_code": "M77.4",
+    "category": "pain",
+    "evidence_base": {
+      "study_count": 1252,
+      "source_articles": 1252
+    },
+    "clinical_presentation": {
+      "symptom_count": 12,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "cold",
+        "instability",
+        "pain"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 25,
+      "primary_treatments": [
+        "insole",
+        "massage",
+        "ice",
+        "orthotic",
+        "brace"
+      ]
+    }
+  },
+  "diabetic foot": {
+    "icd10_code": "E11.621",
+    "category": "metabolic",
+    "evidence_base": {
+      "study_count": 6941,
+      "source_articles": 6941
+    },
+    "clinical_presentation": {
+      "symptom_count": 19,
+      "primary_symptoms": [
+        "bruising",
+        "fatigue",
+        "tenderness",
+        "limited motion",
+        "numbness"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 26,
+      "primary_treatments": [
+        "insole",
+        "massage",
+        "taping",
+        "brace",
+        "surgical"
+      ]
+    }
+  },
+  "rheumatoid arthritis": {
+    "icd10_code": "M06.9",
+    "category": "autoimmune",
+    "evidence_base": {
+      "study_count": 1466,
+      "source_articles": 1466
+    },
+    "clinical_presentation": {
+      "symptom_count": 20,
+      "primary_symptoms": [
+        "fatigue",
+        "tenderness",
+        "limited motion",
+        "numbness",
+        "deformity"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 23,
+      "primary_treatments": [
+        "insole",
+        "brace",
+        "surgical",
+        "strengthening",
+        "fusion"
+      ]
+    }
+  },
+  "hallux valgus": {
+    "icd10_code": "M20.1",
+    "category": "structural",
+    "evidence_base": {
+      "study_count": 5139,
+      "source_articles": 5139
+    },
+    "clinical_presentation": {
+      "symptom_count": 14,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "limited motion",
+        "instability",
+        "pain"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 25,
+      "primary_treatments": [
+        "insole",
+        "ice",
+        "orthotic",
+        "brace",
+        "surgical"
+      ]
+    }
+  },
+  "plantar fasciitis": {
+    "icd10_code": "M72.2",
+    "category": "soft_tissue",
+    "evidence_base": {
+      "study_count": 2566,
+      "source_articles": 2566
+    },
+    "clinical_presentation": {
+      "symptom_count": 16,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "bruising",
+        "tingling",
+        "instability"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 27,
+      "primary_treatments": [
+        "insole",
+        "massage",
+        "ice",
+        "orthotic",
+        "brace"
+      ]
+    }
+  },
+  "achilles tendinopathy": {
+    "icd10_code": "M76.6",
+    "category": "tendon",
+    "evidence_base": {
+      "study_count": 1373,
+      "source_articles": 1373
+    },
+    "clinical_presentation": {
+      "symptom_count": 14,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "cold",
+        "tingling",
+        "instability"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 24,
+      "primary_treatments": [
+        "massage",
+        "ice",
+        "orthotic",
+        "brace",
+        "surgical"
+      ]
+    }
+  },
+  "tarsal tunnel syndrome": {
+    "icd10_code": "G57.5",
+    "category": "neurological",
+    "evidence_base": {
+      "study_count": 747,
+      "source_articles": 747
+    },
+    "clinical_presentation": {
+      "symptom_count": 13,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "cold",
+        "tingling",
+        "instability"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 24,
+      "primary_treatments": [
+        "massage",
+        "ice",
+        "taping",
+        "brace",
+        "surgical"
+      ]
+    }
+  },
+  "pes cavus": {
+    "icd10_code": "Q66.7",
+    "category": "structural",
+    "evidence_base": {
+      "study_count": 488,
+      "source_articles": 488
+    },
+    "clinical_presentation": {
+      "symptom_count": 13,
+      "primary_symptoms": [
+        "inflammation",
+        "tingling",
+        "instability",
+        "pain",
+        "redness"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 21,
+      "primary_treatments": [
+        "insole",
+        "ice",
+        "brace",
+        "surgical",
+        "strengthening"
+      ]
+    }
+  },
+  "calcaneal spur": {
+    "icd10_code": "M77.3",
+    "category": "bone",
+    "evidence_base": {
+      "study_count": 132,
+      "source_articles": 132
+    },
+    "clinical_presentation": {
+      "symptom_count": 8,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "instability",
+        "pain",
+        "numbness"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 20,
+      "primary_treatments": [
+        "insole",
+        "ice",
+        "taping",
+        "surgical",
+        "strengthening"
+      ]
+    }
+  },
+  "heel spur": {
+    "icd10_code": "M77.3",
+    "category": "bone",
+    "evidence_base": {
+      "study_count": 133,
+      "source_articles": 133
+    },
+    "clinical_presentation": {
+      "symptom_count": 7,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "bruising",
+        "pain",
+        "deformity"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 18,
+      "primary_treatments": [
+        "splint",
+        "manipulation",
+        "surgical",
+        "massage",
+        "support"
+      ]
+    }
+  },
+  "stress fracture": {
+    "icd10_code": "M84.3",
+    "category": "bone",
+    "evidence_base": {
+      "study_count": 806,
+      "source_articles": 806
+    },
+    "clinical_presentation": {
+      "symptom_count": 15,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "bruising",
+        "tingling",
+        "instability"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 25,
+      "primary_treatments": [
+        "insole",
+        "massage",
+        "ice",
+        "brace",
+        "surgical"
+      ]
+    }
+  },
+  "gout": {
+    "icd10_code": "M10.9",
+    "category": "metabolic",
+    "evidence_base": {
+      "study_count": 838,
+      "source_articles": 838
+    },
+    "clinical_presentation": {
+      "symptom_count": 11,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "instability",
+        "pain",
+        "redness"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 19,
+      "primary_treatments": [
+        "insole",
+        "massage",
+        "surgical",
+        "fusion",
+        "rest"
+      ]
+    }
+  },
+  "ankle sprain": {
+    "icd10_code": "S93.4",
+    "category": "injury",
+    "evidence_base": {
+      "study_count": 1616,
+      "source_articles": 1616
+    },
+    "clinical_presentation": {
+      "symptom_count": 16,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "cold",
+        "tingling",
+        "instability"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 27,
+      "primary_treatments": [
+        "insole",
+        "massage",
+        "ice",
+        "orthotic",
+        "brace"
+      ]
+    }
+  },
+  "foot ulcer": {
+    "icd10_code": "L97.9",
+    "category": "skin",
+    "evidence_base": {
+      "study_count": 1911,
+      "source_articles": 1911
+    },
+    "clinical_presentation": {
+      "symptom_count": 13,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "cold",
+        "instability",
+        "pain"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 17,
+      "primary_treatments": [
+        "elevation",
+        "surgical",
+        "insole",
+        "manipulation",
+        "osteotomy"
+      ]
+    }
+  },
+  "bunion": {
+    "icd10_code": "M20.1",
+    "category": "structural",
+    "evidence_base": {
+      "study_count": 537,
+      "source_articles": 537
+    },
+    "clinical_presentation": {
+      "symptom_count": 12,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "instability",
+        "pain",
+        "difficulty walking"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 19,
+      "primary_treatments": [
+        "insole",
+        "orthotic",
+        "surgical",
+        "fusion",
+        "exercises"
+      ]
+    }
+  },
+  "morton neuroma": {
+    "icd10_code": "G57.6",
+    "category": "neurological",
+    "evidence_base": {
+      "study_count": 138,
+      "source_articles": 138
+    },
+    "clinical_presentation": {
+      "symptom_count": 11,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "tingling",
+        "instability",
+        "pain"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 13,
+      "primary_treatments": [
+        "surgical",
+        "support",
+        "strengthening",
+        "rest",
+        "injection"
+      ]
+    }
+  },
+  "pes planus": {
+    "icd10_code": "M21.4",
+    "category": "structural",
+    "evidence_base": {
+      "study_count": 778,
+      "source_articles": 778
+    },
+    "clinical_presentation": {
+      "symptom_count": 11,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "limited motion",
+        "instability",
+        "pain"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 22,
+      "primary_treatments": [
+        "insole",
+        "massage",
+        "ice",
+        "orthotic",
+        "brace"
+      ]
+    }
+  },
+  "flat foot": {
+    "icd10_code": "M21.4",
+    "category": "structural",
+    "evidence_base": {
+      "study_count": 585,
+      "source_articles": 585
+    },
+    "clinical_presentation": {
+      "symptom_count": 9,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "instability",
+        "pain",
+        "deformity"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 17,
+      "primary_treatments": [
+        "brace",
+        "elevation",
+        "surgical",
+        "insole",
+        "osteotomy"
+      ]
+    }
+  },
+  "high arch": {
+    "icd10_code": "Q66.7",
+    "category": "structural",
+    "evidence_base": {
+      "study_count": 42,
+      "source_articles": 42
+    },
+    "clinical_presentation": {
+      "symptom_count": 7,
+      "primary_symptoms": [
+        "pain",
+        "numbness",
+        "weakness",
+        "deformity",
+        "aching"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 3,
+      "primary_treatments": [
+        "support",
+        "insole",
+        "orthotic"
+      ]
+    }
+  },
+  "achilles tendinitis": {
+    "icd10_code": "M76.6",
+    "category": "tendon",
+    "evidence_base": {
+      "study_count": 143,
+      "source_articles": 143
+    },
+    "clinical_presentation": {
+      "symptom_count": 10,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "instability",
+        "pain",
+        "redness"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 15,
+      "primary_treatments": [
+        "surgical",
+        "support",
+        "arthroscopy",
+        "antibiotic",
+        "fusion"
+      ]
+    }
+  },
+  "hammertoe": {
+    "icd10_code": "M20.4",
+    "category": "structural",
+    "evidence_base": {
+      "study_count": 224,
+      "source_articles": 224
+    },
+    "clinical_presentation": {
+      "symptom_count": 9,
+      "primary_symptoms": [
+        "swelling",
+        "instability",
+        "pain",
+        "difficulty walking",
+        "numbness"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 18,
+      "primary_treatments": [
+        "orthotic",
+        "brace",
+        "surgical",
+        "osteotomy",
+        "support"
+      ]
+    }
+  },
+  "claw toe": {
+    "icd10_code": "M20.5",
+    "category": "structural",
+    "evidence_base": {
+      "study_count": 129,
+      "source_articles": 129
+    },
+    "clinical_presentation": {
+      "symptom_count": 11,
+      "primary_symptoms": [
+        "swelling",
+        "tingling",
+        "instability",
+        "pain",
+        "limited motion"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 11,
+      "primary_treatments": [
+        "brace",
+        "surgical",
+        "insole",
+        "osteotomy",
+        "support"
+      ]
+    }
+  },
+  "hammer toe": {
+    "icd10_code": "M20.4",
+    "category": "structural",
+    "evidence_base": {
+      "study_count": 167,
+      "source_articles": 167
+    },
+    "clinical_presentation": {
+      "symptom_count": 10,
+      "primary_symptoms": [
+        "inflammation",
+        "swelling",
+        "limited motion",
+        "instability",
+        "pain"
+      ]
+    },
+    "treatment_options": {
+      "treatment_count": 14,
+      "primary_treatments": [
+        "splint",
+        "elevation",
+        "surgical",
+        "osteotomy",
+        "support"
+      ]
+    }
+  }
+}

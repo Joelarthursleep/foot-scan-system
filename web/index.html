@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foot Scan to Custom Last System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1200px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #5e72e4 0%, #825ee4 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .main-content {
+            display: flex;
+            min-height: 500px;
+        }
+
+        .upload-section {
+            flex: 1;
+            padding: 40px;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        .results-section {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .upload-zone {
+            border: 2px dashed #5e72e4;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9ff;
+        }
+
+        .upload-zone:hover {
+            background: #f0f2ff;
+            border-color: #825ee4;
+        }
+
+        .upload-zone.dragging {
+            background: #e8ebff;
+            border-color: #5e72e4;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: #5e72e4;
+            margin-bottom: 20px;
+        }
+
+        .file-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .file-item {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-item .filename {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .file-item .remove {
+            color: #ff4444;
+            cursor: pointer;
+        }
+
+        .process-btn {
+            background: linear-gradient(135deg, #5e72e4 0%, #825ee4 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s;
+        }
+
+        .process-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .process-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #5e72e4, #825ee4);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .results-container {
+            display: none;
+        }
+
+        .result-card {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .result-card h3 {
+            color: #5e72e4;
+            margin-bottom: 15px;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: #666;
+        }
+
+        .metric-value {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .severity-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .severity-none { background: #e8f5e9; color: #4caf50; }
+        .severity-mild { background: #fff3e0; color: #ff9800; }
+        .severity-moderate { background: #ffe0b2; color: #ff6f00; }
+        .severity-severe { background: #ffebee; color: #f44336; }
+
+        .download-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .download-btn {
+            background: #4caf50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #45a049;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .status-success { background: #e8f5e9; color: #4caf50; }
+        .status-error { background: #ffebee; color: #f44336; }
+        .status-info { background: #e3f2fd; color: #2196f3; }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .upload-section {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🦶 Foot Scan to Custom Last System</h1>
+            <p>Transform Volumental scans into personalized shoe lasts with 3D-printed modifications</p>
+        </div>
+
+        <div class="main-content">
+            <div class="upload-section">
+                <h2>Upload Scan Files</h2>
+                <p style="color: #666; margin: 10px 0;">Upload your Volumental OBJ and JSON files</p>
+
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-icon">📁</div>
+                    <h3>Drag & Drop Files Here</h3>
+                    <p style="margin: 10px 0; color: #999;">or click to browse</p>
+                    <input type="file" id="fileInput" class="file-input" multiple accept=".obj,.json">
+                </div>
+
+                <div class="file-list" id="fileList"></div>
+
+                <button class="process-btn" id="processBtn" disabled>
+                    Process Scan
+                </button>
+
+                <div class="progress-bar" id="progressBar" style="display: none;">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div id="statusMessage"></div>
+            </div>
+
+            <div class="results-section">
+                <h2>Analysis Results</h2>
+
+                <div class="results-container" id="resultsContainer">
+                    <!-- Measurements Card -->
+                    <div class="result-card">
+                        <h3>📏 Measurements</h3>
+                        <div id="measurements"></div>
+                    </div>
+
+                    <!-- Features Card -->
+                    <div class="result-card">
+                        <h3>🔍 Anatomical Features</h3>
+                        <div id="features"></div>
+                    </div>
+
+                    <!-- Recommendations Card -->
+                    <div class="result-card">
+                        <h3>👟 Last Recommendations</h3>
+                        <div id="recommendations"></div>
+                    </div>
+
+                    <!-- Download Section -->
+                    <div class="download-section" id="downloadSection" style="display: none;">
+                        <h3>📦 3D Printing Files</h3>
+                        <p style="color: #666; margin: 10px 0;">Download files for 3D printing</p>
+                        <button class="download-btn" id="downloadGcode">Download G-code</button>
+                        <button class="download-btn" id="downloadSTL">Download STL</button>
+                        <div id="printInfo" style="margin-top: 15px;"></div>
+                    </div>
+                </div>
+
+                <div id="noResults" style="color: #999; text-align: center; padding: 40px;">
+                    <p>Upload and process scan files to see results</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let uploadedFiles = {};
+        let currentScanId = null;
+
+        // DOM elements
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const processBtn = document.getElementById('processBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const statusMessage = document.getElementById('statusMessage');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const noResults = document.getElementById('noResults');
+
+        // Upload zone events
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragging');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragging');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragging');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        processBtn.addEventListener('click', processScans);
+
+        function handleFiles(files) {
+            for (let file of files) {
+                const ext = file.name.split('.').pop().toLowerCase();
+                if (ext === 'obj' || ext === 'json') {
+                    uploadedFiles[ext] = file;
+                    updateFileList();
+                }
+            }
+
+            // Enable process button if both files are uploaded
+            if (uploadedFiles.obj && uploadedFiles.json) {
+                processBtn.disabled = false;
+            }
+        }
+
+        function updateFileList() {
+            fileList.innerHTML = '';
+
+            for (let [type, file] of Object.entries(uploadedFiles)) {
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.innerHTML = `
+                    <span class="filename">${file.name}</span>
+                    <span class="remove" onclick="removeFile('${type}')">✕</span>
+                `;
+                fileList.appendChild(item);
+            }
+        }
+
+        function removeFile(type) {
+            delete uploadedFiles[type];
+            updateFileList();
+            processBtn.disabled = !(uploadedFiles.obj && uploadedFiles.json);
+        }
+
+        async function processScans() {
+            if (!uploadedFiles.obj || !uploadedFiles.json) {
+                showStatus('Please upload both OBJ and JSON files', 'error');
+                return;
+            }
+
+            processBtn.disabled = true;
+            progressBar.style.display = 'block';
+            updateProgress(0);
+            showStatus('Processing scan...', 'info');
+
+            const formData = new FormData();
+            formData.append('obj_file', uploadedFiles.obj);
+            formData.append('json_file', uploadedFiles.json);
+
+            try {
+                // Upload and process scan
+                updateProgress(30);
+                const response = await fetch(`${API_BASE}/api/scan/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Processing failed');
+
+                const result = await response.json();
+                currentScanId = result.scan_id;
+
+                updateProgress(60);
+                showStatus('Getting recommendations...', 'info');
+
+                // Get recommendations
+                const recResponse = await fetch(`${API_BASE}/api/last/recommend/${currentScanId}`);
+                const recommendations = await recResponse.json();
+
+                updateProgress(80);
+                showStatus('Generating printing files...', 'info');
+
+                // Generate printing files
+                const printResponse = await fetch(`${API_BASE}/api/printing/generate/${currentScanId}`, {
+                    method: 'POST'
+                });
+                const printData = await printResponse.json();
+
+                updateProgress(100);
+                showStatus('Processing complete!', 'success');
+
+                // Display results
+                displayResults(result, recommendations, printData);
+
+            } catch (error) {
+                showStatus(`Error: ${error.message}`, 'error');
+                console.error(error);
+            } finally {
+                processBtn.disabled = false;
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                }, 2000);
+            }
+        }
+
+        function updateProgress(percent) {
+            progressFill.style.width = percent + '%';
+        }
+
+        function showStatus(message, type) {
+            statusMessage.className = `status-message status-${type}`;
+            statusMessage.textContent = message;
+            statusMessage.style.display = 'block';
+
+            if (type === 'success') {
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        function displayResults(analysis, recommendations, printData) {
+            noResults.style.display = 'none';
+            resultsContainer.style.display = 'block';
+
+            // Display measurements
+            const measurementsDiv = document.getElementById('measurements');
+            measurementsDiv.innerHTML = `
+                <div class="metric">
+                    <span class="metric-label">Foot Length</span>
+                    <span class="metric-value">${analysis.measurements.foot_length?.toFixed(1) || 'N/A'} mm</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Ball Girth</span>
+                    <span class="metric-value">${analysis.measurements.ball_girth?.toFixed(1) || 'N/A'} mm</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Instep Girth</span>
+                    <span class="metric-value">${analysis.measurements.instep_girth?.toFixed(1) || 'N/A'} mm</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Arch Height</span>
+                    <span class="metric-value">${analysis.measurements.arch_height?.toFixed(1) || 'N/A'} mm</span>
+                </div>
+            `;
+
+            // Display features
+            const featuresDiv = document.getElementById('features');
+            const bunion = analysis.features.bunion;
+            const arch = analysis.features.arch;
+
+            featuresDiv.innerHTML = `
+                <div class="metric">
+                    <span class="metric-label">Bunion Detected</span>
+                    <span class="metric-value">
+                        ${bunion.has_bunion ?
+                            `<span class="severity-badge severity-${bunion.severity}">${bunion.severity}</span>` :
+                            '<span class="severity-badge severity-none">None</span>'}
+                    </span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Arch Type</span>
+                    <span class="metric-value">${arch.type || 'Normal'}</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Support Needed</span>
+                    <span class="metric-value">${arch.support_level_needed || 'Minimal'}</span>
+                </div>
+            `;
+
+            // Display recommendations
+            const recDiv = document.getElementById('recommendations');
+            if (recommendations.recommendations && recommendations.recommendations.length > 0) {
+                const topRec = recommendations.recommendations[0];
+                recDiv.innerHTML = `
+                    <div class="metric">
+                        <span class="metric-label">Recommended Size (EU)</span>
+                        <span class="metric-value">${topRec.size_eu}</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Last ID</span>
+                        <span class="metric-value">${topRec.last_id}</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Confidence</span>
+                        <span class="metric-value">${(topRec.confidence * 100).toFixed(1)}%</span>
+                    </div>
+                    <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
+                        <strong>Reasoning:</strong>
+                        <p style="color: #666; margin-top: 5px;">${topRec.reasoning}</p>
+                    </div>
+                `;
+            }
+
+            // Show download section if printing files were generated
+            if (printData && printData.gcode_url) {
+                const downloadSection = document.getElementById('downloadSection');
+                downloadSection.style.display = 'block';
+
+                document.getElementById('printInfo').innerHTML = `
+                    <div class="metric">
+                        <span class="metric-label">Estimated Print Time</span>
+                        <span class="metric-value">${printData.estimated_print_time_minutes?.toFixed(0) || 'N/A'} minutes</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Material Required</span>
+                        <span class="metric-value">${printData.material_weight_g?.toFixed(1) || 'N/A'} g</span>
+                    </div>
+                `;
+
+                // Set up download buttons
+                document.getElementById('downloadGcode').onclick = () => {
+                    window.open(`${API_BASE}${printData.gcode_url}`, '_blank');
+                };
+
+                document.getElementById('downloadSTL').onclick = () => {
+                    window.open(`${API_BASE}${printData.stl_url}`, '_blank');
+                };
+            }
+        }
+    </script>
+</body>
+</html>

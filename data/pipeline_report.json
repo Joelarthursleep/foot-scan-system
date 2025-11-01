@@ -1,0 +1,91 @@
+{
+  "timestamp": "2025-10-27T16:01:04.597164",
+  "configuration": {
+    "queries_executed": 92,
+    "max_articles_per_query": 1000
+  },
+  "collection_stats": {
+    "total_articles": 44084,
+    "unique_conditions": 23,
+    "unique_symptoms": 22,
+    "unique_treatments": 27,
+    "relationships": 734
+  },
+  "top_conditions": [
+    {
+      "name": "diabetic foot",
+      "icd10_code": "E11.621",
+      "mentions": 6941,
+      "symptom_count": 19,
+      "treatment_count": 26
+    },
+    {
+      "name": "hallux valgus",
+      "icd10_code": "M20.1",
+      "mentions": 5139,
+      "symptom_count": 14,
+      "treatment_count": 25
+    },
+    {
+      "name": "plantar fasciitis",
+      "icd10_code": "M72.2",
+      "mentions": 2566,
+      "symptom_count": 16,
+      "treatment_count": 27
+    },
+    {
+      "name": "foot ulcer",
+      "icd10_code": "L97.9",
+      "mentions": 1911,
+      "symptom_count": 13,
+      "treatment_count": 17
+    },
+    {
+      "name": "ankle sprain",
+      "icd10_code": "S93.4",
+      "mentions": 1616,
+      "symptom_count": 16,
+      "treatment_count": 27
+    },
+    {
+      "name": "rheumatoid arthritis",
+      "icd10_code": "M06.9",
+      "mentions": 1466,
+      "symptom_count": 20,
+      "treatment_count": 23
+    },
+    {
+      "name": "achilles tendinopathy",
+      "icd10_code": "M76.6",
+      "mentions": 1373,
+      "symptom_count": 14,
+      "treatment_count": 24
+    },
+    {
+      "name": "metatarsalgia",
+      "icd10_code": "M77.4",
+      "mentions": 1252,
+      "symptom_count": 12,
+      "treatment_count": 25
+    },
+    {
+      "name": "gout",
+      "icd10_code": "M10.9",
+      "mentions": 838,
+      "symptom_count": 11,
+      "treatment_count": 19
+    },
+    {
+      "name": "stress fracture",
+      "icd10_code": "M84.3",
+      "mentions": 806,
+      "symptom_count": 15,
+      "treatment_count": 25
+    }
+  ],
+  "output_files": [
+    "exports/foot_conditions_knowledge_base.json",
+    "exports/ml_training_data.json",
+    "exports/condition_summary.json"
+  ]
+}

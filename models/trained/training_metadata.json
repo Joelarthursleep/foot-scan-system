@@ -1,0 +1,243 @@
+{
+  "last_training_date": "2025-10-28T15:46:59.970862",
+  "total_training_runs": 2,
+  "model_versions": [
+    {
+      "version": 1,
+      "date": "2025-10-28T15:43:06.528441",
+      "samples": 350,
+      "performance": {
+        "hallux_valgus": {
+          "mean_cv_accuracy": 0.6395433027011974,
+          "test_accuracy": 1.0,
+          "test_precision": 1.0,
+          "test_recall": 1.0,
+          "test_f1": 1.0,
+          "model_path": "models/trained/hallux_valgus_models_v1.pkl",
+          "version": 1
+        },
+        "pes_planus": {
+          "mean_cv_accuracy": 0.6427179058758005,
+          "test_accuracy": 1.0,
+          "test_precision": 1.0,
+          "test_recall": 1.0,
+          "test_f1": 1.0,
+          "model_path": "models/trained/pes_planus_models_v1.pkl",
+          "version": 1
+        },
+        "pes_cavus": {
+          "mean_cv_accuracy": 0.6251517683096631,
+          "test_accuracy": 1.0,
+          "test_precision": 1.0,
+          "test_recall": 1.0,
+          "test_f1": 1.0,
+          "model_path": "models/trained/pes_cavus_models_v1.pkl",
+          "version": 1
+        },
+        "plantar_fasciitis": {
+          "mean_cv_accuracy": 0.011111111111111112,
+          "test_accuracy": 1.0,
+          "test_precision": 1.0,
+          "test_recall": 1.0,
+          "test_f1": 1.0,
+          "model_path": "models/trained/plantar_fasciitis_models_v1.pkl",
+          "version": 1
+        },
+        "hammertoe": {
+          "mean_cv_accuracy": 0.04386724386724387,
+          "test_accuracy": 1.0,
+          "test_precision": 1.0,
+          "test_recall": 1.0,
+          "test_f1": 1.0,
+          "model_path": "models/trained/hammertoe_models_v1.pkl",
+          "version": 1
+        },
+        "metatarsalgia": {
+          "mean_cv_accuracy": 0.0803108003108003,
+          "test_accuracy": 1.0,
+          "test_precision": 1.0,
+          "test_recall": 1.0,
+          "test_f1": 1.0,
+          "model_path": "models/trained/metatarsalgia_models_v1.pkl",
+          "version": 1
+        }
+      }
+    },
+    {
+      "version": 2,
+      "date": "2025-10-28T15:46:59.970876",
+      "samples": 350,
+      "performance": {
+        "hallux_valgus": {
+          "mean_cv_accuracy": 0.6395433027011974,
+          "test_accuracy": 1.0,
+          "test_precision": 1.0,
+          "test_recall": 1.0,
+          "test_f1": 1.0,
+          "model_path": "models/trained/hallux_valgus_models_v2.pkl",
+          "version": 2
+        },
+        "pes_planus": {
+          "mean_cv_accuracy": 0.6427179058758005,
+          "test_accuracy": 1.0,
+          "test_precision": 1.0,
+          "test_recall": 1.0,
+          "test_f1": 1.0,
+          "model_path": "models/trained/pes_planus_models_v2.pkl",
+          "version": 2
+        },
+        "pes_cavus": {
+          "mean_cv_accuracy": 0.6251517683096631,
+          "test_accuracy": 1.0,
+          "test_precision": 1.0,
+          "test_recall": 1.0,
+          "test_f1": 1.0,
+          "model_path": "models/trained/pes_cavus_models_v2.pkl",
+          "version": 2
+        },
+        "plantar_fasciitis": {
+          "mean_cv_accuracy": 0.011111111111111112,
+          "test_accuracy": 1.0,
+          "test_precision": 1.0,
+          "test_recall": 1.0,
+          "test_f1": 1.0,
+          "model_path": "models/trained/plantar_fasciitis_models_v2.pkl",
+          "version": 2
+        },
+        "hammertoe": {
+          "mean_cv_accuracy": 0.04386724386724387,
+          "test_accuracy": 1.0,
+          "test_precision": 1.0,
+          "test_recall": 1.0,
+          "test_f1": 1.0,
+          "model_path": "models/trained/hammertoe_models_v2.pkl",
+          "version": 2
+        },
+        "metatarsalgia": {
+          "mean_cv_accuracy": 0.0803108003108003,
+          "test_accuracy": 1.0,
+          "test_precision": 1.0,
+          "test_recall": 1.0,
+          "test_f1": 1.0,
+          "model_path": "models/trained/metatarsalgia_models_v2.pkl",
+          "version": 2
+        }
+      }
+    }
+  ],
+  "performance_history": {
+    "2025-10-28T15:43:06.528324": {
+      "hallux_valgus": {
+        "mean_cv_accuracy": 0.6395433027011974,
+        "test_accuracy": 1.0,
+        "test_precision": 1.0,
+        "test_recall": 1.0,
+        "test_f1": 1.0,
+        "model_path": "models/trained/hallux_valgus_models_v1.pkl",
+        "version": 1
+      },
+      "pes_planus": {
+        "mean_cv_accuracy": 0.6427179058758005,
+        "test_accuracy": 1.0,
+        "test_precision": 1.0,
+        "test_recall": 1.0,
+        "test_f1": 1.0,
+        "model_path": "models/trained/pes_planus_models_v1.pkl",
+        "version": 1
+      },
+      "pes_cavus": {
+        "mean_cv_accuracy": 0.6251517683096631,
+        "test_accuracy": 1.0,
+        "test_precision": 1.0,
+        "test_recall": 1.0,
+        "test_f1": 1.0,
+        "model_path": "models/trained/pes_cavus_models_v1.pkl",
+        "version": 1
+      },
+      "plantar_fasciitis": {
+        "mean_cv_accuracy": 0.011111111111111112,
+        "test_accuracy": 1.0,
+        "test_precision": 1.0,
+        "test_recall": 1.0,
+        "test_f1": 1.0,
+        "model_path": "models/trained/plantar_fasciitis_models_v1.pkl",
+        "version": 1
+      },
+      "hammertoe": {
+        "mean_cv_accuracy": 0.04386724386724387,
+        "test_accuracy": 1.0,
+        "test_precision": 1.0,
+        "test_recall": 1.0,
+        "test_f1": 1.0,
+        "model_path": "models/trained/hammertoe_models_v1.pkl",
+        "version": 1
+      },
+      "metatarsalgia": {
+        "mean_cv_accuracy": 0.0803108003108003,
+        "test_accuracy": 1.0,
+        "test_precision": 1.0,
+        "test_recall": 1.0,
+        "test_f1": 1.0,
+        "model_path": "models/trained/metatarsalgia_models_v1.pkl",
+        "version": 1
+      }
+    },
+    "2025-10-28T15:46:59.970874": {
+      "hallux_valgus": {
+        "mean_cv_accuracy": 0.6395433027011974,
+        "test_accuracy": 1.0,
+        "test_precision": 1.0,
+        "test_recall": 1.0,
+        "test_f1": 1.0,
+        "model_path": "models/trained/hallux_valgus_models_v2.pkl",
+        "version": 2
+      },
+      "pes_planus": {
+        "mean_cv_accuracy": 0.6427179058758005,
+        "test_accuracy": 1.0,
+        "test_precision": 1.0,
+        "test_recall": 1.0,
+        "test_f1": 1.0,
+        "model_path": "models/trained/pes_planus_models_v2.pkl",
+        "version": 2
+      },
+      "pes_cavus": {
+        "mean_cv_accuracy": 0.6251517683096631,
+        "test_accuracy": 1.0,
+        "test_precision": 1.0,
+        "test_recall": 1.0,
+        "test_f1": 1.0,
+        "model_path": "models/trained/pes_cavus_models_v2.pkl",
+        "version": 2
+      },
+      "plantar_fasciitis": {
+        "mean_cv_accuracy": 0.011111111111111112,
+        "test_accuracy": 1.0,
+        "test_precision": 1.0,
+        "test_recall": 1.0,
+        "test_f1": 1.0,
+        "model_path": "models/trained/plantar_fasciitis_models_v2.pkl",
+        "version": 2
+      },
+      "hammertoe": {
+        "mean_cv_accuracy": 0.04386724386724387,
+        "test_accuracy": 1.0,
+        "test_precision": 1.0,
+        "test_recall": 1.0,
+        "test_f1": 1.0,
+        "model_path": "models/trained/hammertoe_models_v2.pkl",
+        "version": 2
+      },
+      "metatarsalgia": {
+        "mean_cv_accuracy": 0.0803108003108003,
+        "test_accuracy": 1.0,
+        "test_precision": 1.0,
+        "test_recall": 1.0,
+        "test_f1": 1.0,
+        "model_path": "models/trained/metatarsalgia_models_v2.pkl",
+        "version": 2
+      }
+    }
+  },
+  "total_samples_trained": 350
+}

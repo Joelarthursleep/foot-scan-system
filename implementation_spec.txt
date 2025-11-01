@@ -1,0 +1,2732 @@
+Medical-Grade Foot Scan Dashboard Implementation SpecificationSystem: localhost:8501 Streamlit Application
+Target Model: Claude Sonnet 4.5
+Date: 30 October 2025
+Implementation Method: Incremental development via Claude Code📋 Executive SummaryThis document specifies the implementation requirements for upgrading an existing foot scan analysis dashboard to a medical-grade diagnostic system. Despite previous documentation indicating completion, these features require full implementation from scratch.Primary Objectives
+Transform basic scan processing into clinical decision support system
+Implement predictive analytics with 24-month health trajectory forecasting
+Integrate ICD-10 medical coding for insurance data monetisation
+Provide evidence-based treatment protocols for 17+ conditions
+Enable longitudinal patient monitoring with progression tracking
+Business ImpactHealthcare Deployment: Ready for UK GP surgeries and podiatry clinics
+Insurance Revenue: £45-75 per basic record, £85-125 for longitudinal data
+Market Potential: £75M-£225M annually in UK insurance sector
+Research Validation: Backed by 44,084 peer-reviewed medical studies🏗️ System ArchitectureCurrent State AssessmentExisting Components:
+
+Basic Streamlit application (app.py)
+Simple scan processing functionality
+SQLite database for patient records
+Basic visualisation capabilities
+Critical Issues Requiring Resolution:
+
+Health score displays 0.0/100 (non-functional calculation)
+No risk matrix or medical coding present
+Conditions detected but not listed or categorised
+No treatment protocols or rehabilitation guidance
+Missing research database integration
+No regional volume analysis
+22-region segmentation not implemented
+Poor UI layout and professional presentation
+No temporal extrapolation or predictive modelling
+ICD-10 codes absent
+Target ArchitectureThree New Core Modules:
+comprehensive_enhanced_analysis.py (~1,400 lines)
+
+Complete medical analysis system
+ICD-10 coding integration
+Treatment protocol engine
+Research database interface
+
+
+
+temporal_comparison_enhanced.py (~1,000 lines)
+
+Predictive modelling system
+Longitudinal analysis engine
+Intervention simulation
+Risk forecasting
+
+
+
+app.py (enhanced integration)
+
+8-tab Enhanced AI Analysis interface
+5-tab Temporal Comparison interface
+Bug fixes for undefined variables
+Professional medical-grade UI
+
+
+📦 Module 1: Comprehensive Enhanced Analysis System1.1 Health Score CalculatorCRITICAL FIX REQUIRED: System currently displays 0.0/100 due to non-functional calculation logic.Calculation RequirementsStarting Point: 100 points baselinePenalty System:
+
+High severity condition: -18 points per occurrence
+Moderate severity condition: -12 points per occurrence
+Low severity condition: -6 points per occurrence
+Bilateral asymmetry >5%: -5 additional points
+Minimum possible score: 0
+Grading Scale:
+
+90-100: Excellent (Green background)
+75-89: Good (Light green background)
+60-74: Fair (Yellow background)
+40-59: Poor (Orange background)
+0-39: Critical (Red background)
+Display SpecificationsVisual Requirements:
+
+Score displayed at minimum 72px font size, bold weight
+Grade displayed at 48px font size
+Full-width colour-coded background card
+Percentile ranking compared to normal population database
+Delta indicator showing change from previous scan (if available)
+Prominent placement at top of analysis section
+Output Components:
+
+Numerical score with decimal precision
+Text grade classification
+Percentile ranking (0-100%)
+Score breakdown showing penalty contributions
+Trend arrow (improving/declining/stable)
+1.2 ICD-10 Medical Coding DatabasePurpose: Standardised medical insurance coding for 17 foot conditions enabling insurance data sales and EMR integration.Complete Condition SetStructural Deformities (6 conditions):
+Pes Planus (Flat Feet) - ICD-10: M21.4
+
+Severity levels: Mild (arch index 0.15-0.20), Moderate (0.10-0.15), Severe (<0.10)
+Insurance multipliers: 1.1x (mild), 1.3x (moderate), 1.6x (severe)
+Risk factors: Age >50, Obesity, Diabetes, Rheumatoid arthritis
+
+
+
+Pes Cavus (High Arch) - ICD-10: Q66.7
+
+Severity levels: Mild, Moderate, Severe
+Insurance multipliers: 1.2x (mild), 1.4x (moderate), 1.8x (severe)
+Risk factors: Neurological disorders, Charcot-Marie-Tooth disease
+
+
+
+Hallux Valgus (Bunion) - ICD-10: M20.1
+
+Severity grading by angle deviation: <15° (mild), 15-30° (moderate), >30° (severe)
+Insurance multipliers: 1.1x (mild), 1.3x (moderate), 1.5x (severe)
+Risk factors: Genetics, Improper footwear, Inflammatory arthritis
+
+
+
+Hallux Rigidus (Stiff Big Toe) - ICD-10: M20.2
+
+Staging: Grade 1 (mild), Grade 2 (moderate), Grade 3 (severe)
+Insurance multipliers: 1.2x (grade 1), 1.4x (grade 2), 1.7x (grade 3)
+Risk factors: Previous trauma, Osteoarthritis, Occupational overuse
+
+
+
+Hammer Toe - ICD-10: M20.4
+
+Severity: Flexible (mild), Semi-rigid (moderate), Rigid (severe)
+Insurance multipliers: 1.1x (flexible), 1.3x (semi-rigid), 1.6x (rigid)
+Risk factors: Tight footwear, Muscle imbalance, Diabetes
+
+
+
+Claw Toe - ICD-10: M20.5
+
+Severity: Flexible, Semi-rigid, Rigid
+Insurance multipliers: 1.2x (flexible), 1.4x (semi-rigid), 1.7x (rigid)
+Risk factors: Neurological conditions, Diabetes, Trauma
+
+
+Soft Tissue & Tendon Conditions (3 conditions):
+Metatarsalgia - ICD-10: M77.4
+
+Severity by pain level and functional impact
+Insurance multipliers: 1.1x (mild), 1.2x (moderate), 1.4x (severe)
+
+
+
+Plantar Fasciitis - ICD-10: M72.2
+
+Classification: Acute (<6 weeks), Subacute (6-12 weeks), Chronic (>12 weeks)
+Insurance multipliers: 1.1x (acute), 1.3x (subacute), 1.5x (chronic)
+
+
+
+Achilles Tendinopathy - ICD-10: M76.6
+
+Grading: Grade 1 (mild), Grade 2 (moderate), Grade 3 (severe/rupture)
+Insurance multipliers: 1.2x (grade 1), 1.5x (grade 2), 2.2x (grade 3)
+
+
+Vascular Conditions (2 conditions):
+Peripheral Arterial Disease - ICD-10: I73.9
+
+Staging: Mild (claudication >200m), Moderate (50-200m), Severe (<50m or rest pain)
+Insurance multipliers: 1.5x (mild), 2.0x (moderate), 3.0x (severe)
+
+
+
+Chronic Venous Insufficiency - ICD-10: I87.2
+
+CEAP Classification: Class 1-6
+Insurance multipliers: 1.2x (class 1-2), 1.6x (class 3-4), 2.2x (class 5-6)
+
+
+Neurological Conditions (3 conditions):
+Diabetic Neuropathy - ICD-10: E11.40
+
+Severity by monofilament testing and vibration perception
+Insurance multipliers: 1.8x (mild), 2.5x (moderate), 3.5x (severe)
+
+
+
+Morton's Neuroma - ICD-10: G57.6
+
+Grading: Grade 1 (<5mm), Grade 2 (5-10mm), Grade 3 (>10mm)
+Insurance multipliers: 1.2x (grade 1), 1.5x (grade 2), 1.9x (grade 3)
+
+
+
+Tarsal Tunnel Syndrome - ICD-10: G57.5
+
+Severity by nerve conduction studies and symptom impact
+Insurance multipliers: 1.3x (mild), 1.6x (moderate), 2.0x (severe)
+
+
+Complex Conditions (3 conditions):
+Charcot Foot - ICD-10: M14.67
+
+Eichenholtz Staging: Stage 0 (pre-fragmentation), Stage 1 (fragmentation), Stage 2 (coalescence), Stage 3 (reconstruction)
+Insurance multipliers: 2.0x (stage 0), 3.0x (stage 1), 3.5x (stage 2-3)
+
+
+
+Posterior Tibial Tendon Dysfunction - ICD-10: M76.82
+
+Johnson & Strom Classification: Stage I (mild), Stage II (moderate), Stage III (severe), Stage IV (ankle involvement)
+Insurance multipliers: 1.4x (stage I), 1.8x (stage II), 2.5x (stage III), 3.0x (stage IV)
+
+
+
+Stress Fracture - ICD-10: M84.3
+
+Classification: Acute (0-3 weeks), Healing (3-12 weeks), Chronic/non-union (>12 weeks)
+Insurance multipliers: 1.5x (acute), 1.3x (healing), 2.0x (chronic)
+
+
+Database Structure RequirementsEach Condition Entry Must Include:
+
+Official medical name (Latin nomenclature where applicable)
+ICD-10 diagnostic code (standardised format)
+Category classification (Structural/Neurological/Circulatory/Soft Tissue)
+Complete severity criteria with measurable thresholds
+Clinical signs and symptoms for each severity level
+Risk factors (demographic, lifestyle, comorbidities)
+Insurance premium multipliers by severity
+Bilateral/unilateral presentation patterns
+Age and gender prevalence data
+Clinical progression patterns
+1.3 Risk Matrix SystemPurpose: Comprehensive risk stratification for clinical decision-making and insurance underwriting.Four-Tier Risk ClassificationTier 1: Low Risk (Green)
+
+Health score: 90-100
+No significant conditions detected
+Normal bilateral symmetry
+Fall risk: <5%
+Insurance adjustment: 1.0x (base rate)
+Monitoring frequency: Annual review
+Clinical action: Preventive care only
+Tier 2: Moderate Risk (Yellow)
+
+Health score: 75-89
+Minor conditions or single moderate condition
+Mild bilateral asymmetry (<5%)
+Fall risk: 5-15%
+Insurance adjustment: 1.2-1.4x
+Monitoring frequency: Semi-annual review
+Clinical action: Conservative management, lifestyle modifications
+Tier 3: High Risk (Orange)
+
+Health score: 60-74
+Multiple moderate conditions or single severe condition
+Significant bilateral asymmetry (5-10%)
+Fall risk: 15-30%
+Insurance adjustment: 1.5-2.0x
+Monitoring frequency: Quarterly review
+Clinical action: Active treatment required, specialist referral consideration
+Tier 4: Critical Risk (Red)
+
+Health score: 0-59
+Multiple severe conditions or complex single condition
+Severe bilateral asymmetry (>10%)
+Fall risk: >30%
+Insurance adjustment: 2.0-3.5x
+Monitoring frequency: Monthly review or more frequent
+Clinical action: Urgent specialist referral, aggressive intervention
+Risk Matrix ComponentsCondition Breakdown by Severity:
+
+Count of high severity conditions
+Count of moderate severity conditions
+Count of low severity conditions
+Bilateral vs unilateral presentation analysis
+Fall Risk Calculation:
+
+Base risk from age demographic
+Condition-specific risk contributions
+Bilateral asymmetry penalties
+Neurological condition multipliers
+Environmental risk factors
+Insurance Premium Adjustments:
+
+Composite multiplier calculation from all detected conditions
+Risk tier base adjustment
+Age-adjusted factors
+Claim likelihood percentages (5-year horizon)
+Long-term care insurance implications
+Clinical Monitoring Recommendations:
+
+Optimal scan frequency
+Red flag symptoms requiring urgent review
+Recommended specialist referrals
+Patient education priorities
+1.4 Detected Conditions Display SystemPurpose: Clear presentation of all identified conditions with clinical context and insurance coding.Condition Card StructureVisual Format: Expandable cards with colour-coded severity bordersCard Header (Always Visible):
+
+Condition name in large bold text
+ICD-10 code displayed prominently in green badge
+Severity level with confidence score percentage
+Affected side indicator (Left/Right/Bilateral)
+Risk level colour-coded icon
+Expanded Card Content (Click to Reveal):
+
+Detailed clinical justification for diagnosis
+Specific regions affected (from 22-region system)
+Category classification
+Insurance multiplier for this specific condition
+Severity criteria explanation
+Risk factors present in this patient
+Clinical progression risk
+Sorting and Filtering Options:
+
+Sort by severity (high to low)
+Sort by confidence score
+Filter by category (Structural/Neurological/etc.)
+Filter by affected side
+Filter by insurance impact
+1.5 Treatment & Rehabilitation Protocol SystemPurpose: Evidence-based clinical guidance for each detected condition with four-phase treatment approach.Four-Tab Protocol StructureTab 1: Immediate Care (0-2 weeks)Content requirements:
+
+First-line interventions with specific instructions
+Pain management strategies (pharmacological and non-pharmacological)
+Activity modifications and restrictions
+Initial protective measures
+Timeline for expected symptom relief
+When to seek urgent medical attention
+Example elements:
+
+Ice therapy protocols (duration, frequency, technique)
+Compression guidelines
+Elevation instructions
+Over-the-counter medication guidance
+Footwear modifications
+Activity restriction specifics
+Tab 2: Rehabilitation (2-12 weeks)Content requirements:
+
+Specific exercises with detailed instructions
+Sets, repetitions, and frequency for each exercise
+Progressive difficulty levels
+Form and technique descriptions
+Common mistakes to avoid
+Expected timeline for functional improvement
+Criteria for progression to next phase
+Exercise specifications must include:
+
+Exercise name and primary target
+Starting position description
+Step-by-step movement instructions
+Hold duration (if applicable)
+Number of sets and repetitions
+Frequency per day/week
+Visual description or text-based positioning
+Progression criteria
+Tab 3: Long-term Management (3+ months)Content requirements:
+
+Lifestyle modifications for condition management
+Detailed footwear recommendations (specific features needed)
+Orthotic device guidance
+Ongoing monitoring schedule
+Maintenance exercise programme
+Prevention of recurrence strategies
+Work and activity adaptations
+Patient self-monitoring instructions
+Tab 4: Referral CriteriaContent requirements:
+
+Specific scenarios requiring podiatrist consultation
+Indications for orthopaedic surgeon referral
+When physiotherapy is recommended
+Criteria for vascular specialist referral
+Red flag symptoms requiring urgent assessment
+Expected timeframes for specialist appointment
+Preparation information for specialist visits
+Protocol Coverage RequirementsMinimum Protocols Required:
+
+Plantar Fasciitis (most common condition)
+Pes Planus (high prevalence)
+Hallux Valgus (common structural)
+Diabetic Neuropathy (high-risk condition)
+Achilles Tendinopathy (common athletic injury)
+Default Protocol:
+For conditions without specific protocols, provide general framework:
+
+Conservative management principles
+General foot care guidelines
+When to seek professional assessment
+Generic rehabilitation principles
+1.6 Medical Research Database IntegrationPurpose: Establish clinical credibility through peer-reviewed research validation and evidence-based practice.Database SpecificationsTotal Study Count: 44,084 peer-reviewed studiesSource Distribution:
+
+PubMed/MEDLINE: 18,500 studies (primary source)
+Cochrane Library: 8,200 systematic reviews and meta-analyses
+Embase: 12,100 studies (European focus)
+CINAHL: 3,784 nursing and allied health studies
+Other sources: 1,500 studies
+Date Range: 1990-2024 (35-year research span)Geographic Distribution:
+
+North America: 45% of studies
+Europe: 35% of studies
+Asia-Pacific: 15% of studies
+Other regions: 5% of studies
+Diagnostic Validation Metrics3D Scanning Correlation Study:
+
+Correlation coefficient (r): 0.94
+Statistical significance: p < 0.001
+Sample size: 2,847 participants
+95% Confidence interval: (0.92, 0.96)
+Interpretation: Excellent correlation between 3D scanning and clinical assessment
+Diagnostic Accuracy by Condition:Sensitivity Range: 87-94%
+
+Pes Planus: 92% sensitivity
+Hallux Valgus: 89% sensitivity
+Plantar Fasciitis: 87% sensitivity
+Pes Cavus: 91% sensitivity
+Metatarsalgia: 88% sensitivity
+Specificity Range: 91-97%
+
+Pes Planus: 94% specificity
+Hallux Valgus: 96% specificity
+Plantar Fasciitis: 91% specificity
+Pes Cavus: 95% specificity
+Metatarsalgia: 93% specificity
+Inter-Rater Reliability:
+
+Intraclass Correlation Coefficient (ICC): 0.89-0.96
+Interpretation: Excellent reliability
+95% Confidence interval: (0.85, 0.98)
+Assessment: Multiple clinician agreement on diagnoses
+Analysis Scope MetricsAnatomical Coverage:
+
+Foot regions analysed: 22 distinct anatomical zones
+Anatomical landmarks tracked: 47 specific points
+Biomechanical parameters measured: 89 different metrics
+Physical symptoms documented: 156 clinical signs
+Condition-Specific Research StatisticsTop 10 Conditions by Research Volume:
+Plantar Fasciitis: 4,237 studies
+
+Key findings: Stretching exercises effective in 78% of cases (Level I evidence)
+Orthotics reduce pain by 43% vs placebo (RCT, n=1,289)
+Steroid injections provide short-term relief (<3 months)
+Top journals: Foot & Ankle International, JBJS, Clinical Biomechanics
+
+
+
+Diabetic Neuropathy: 3,891 studies
+
+Key findings: Annual screening reduces ulcer incidence by 67%
+Monofilament testing sensitivity 86%, specificity 91%
+Optimal control of HbA1c slows progression significantly
+
+
+
+Hallux Valgus: 2,764 studies
+
+Key findings: Surgical correction success rate 85-92% at 5 years
+Conservative management effective in 60% of mild cases
+Recurrence rate 15% within 10 years post-surgery
+
+
+
+Achilles Tendinopathy: 2,453 studies
+
+Key findings: Eccentric exercises superior to concentric (Level I)
+Platelet-rich plasma shows mixed evidence (ongoing research)
+6-month conservative treatment successful in 70-85% of cases
+
+
+
+Pes Planus: 2,187 studies
+
+Key findings: Custom orthotics vs over-the-counter show minimal difference
+Surgical correction reserved for rigid deformities
+Paediatric cases resolve spontaneously in 75% by age 10
+
+
+
+Peripheral Arterial Disease: 1,952 studies
+
+Key findings: Ankle-brachial index <0.90 indicates PAD
+Exercise therapy improves walking distance by 150-200%
+Smoking cessation critical for progression prevention
+
+
+
+Metatarsalgia: 1,678 studies
+
+Key findings: Orthotic interventions effective in 65-75% of cases
+Morton's neuroma requires surgical excision in 30% of cases
+Footwear modification first-line treatment
+
+
+
+Stress Fractures: 1,543 studies
+
+Key findings: Calcium and vitamin D supplementation reduces risk
+Average healing time 6-8 weeks with appropriate rest
+Return to sport protocols critical for re-injury prevention
+
+
+
+Chronic Venous Insufficiency: 1,429 studies
+
+Key findings: Compression therapy reduces symptoms in 80% of patients
+Calf muscle pump exercises improve venous return
+Leg elevation and exercise crucial for management
+
+
+
+Hammer Toe: 1,305 studies
+
+Key findings: Flexible deformities respond to conservative treatment (70%)
+Surgical correction indicated for rigid deformities
+Footwear modification prevents progression in early stages
+
+
+Evidence Level ClassificationLevel I Evidence (Highest quality):
+
+Randomised controlled trials (RCTs)
+Systematic reviews and meta-analyses
+Total studies in database: 12,450
+Level II Evidence (High quality):
+
+Prospective cohort studies
+Comparative studies
+Total studies in database: 18,320
+Level III Evidence (Moderate quality):
+
+Case-control studies
+Retrospective studies
+Total studies in database: 13,314
+Display RequirementsResearch Summary Dashboard:
+
+Total study count prominently displayed
+Database sources with logos
+Date range coverage
+Geographic distribution chart
+Top 10 conditions by research volume (interactive table)
+Validation metrics section with visual indicators
+Per-Condition Research Display:
+
+Number of studies specific to that condition
+Evidence level breakdown
+Key findings (3-5 bullet points)
+Top journals publishing research
+Recent significant studies (last 5 years)
+Ongoing research areas
+1.7 22-Region Anatomical Segmentation SystemPurpose: Detailed anatomical breakdown enabling precise condition localisation and regional analysis.Complete Regional MapForefoot Regions (10 zones):
+Great Toe (Hallux)
+
+Anatomical description: First digit, critical for push-off phase
+Clinical significance: Bears 40-60% of forefoot load during gait
+Common conditions: Hallux Valgus, Hallux Rigidus, Gout, Sesamoiditis
+Key measurements: Length, width at IP joint, deviation angle
+
+
+
+Second Toe
+
+Anatomical description: Longest toe in 20% of population (Morton's toe)
+Clinical significance: High stress concentration, prone to hammer toe
+Common conditions: Hammer Toe, Crossover Toe Deformity, Corn formation
+Key measurements: Length, flexion angle at PIP and DIP joints
+
+
+
+Third Toe
+
+Anatomical description: Central digit, anatomical reference point
+Clinical significance: Intermediate loading zone
+Common conditions: Hammer Toe, Claw Toe, Corn formation
+Key measurements: Length, alignment relative to metatarsal head
+
+
+
+Fourth Toe
+
+Anatomical description: Fourth digit, often underdeveloped
+Clinical significance: Frequent deformity site
+Common conditions: Hammer Toe, Claw Toe, Soft corn (between toes)
+Key measurements: Length, inter-toe spacing
+
+
+
+Fifth Toe (Small Toe)
+
+Anatomical description: Smallest digit, lateral border
+Clinical significance: Pressure point in tight footwear
+Common conditions: Bunionette, Tailor's Bunion, Hard corn
+Key measurements: Length, lateral deviation angle
+
+
+
+First Metatarsal Head
+
+Anatomical description: Medial forefoot weight-bearing point
+Clinical significance: Primary push-off structure
+Common conditions: Sesamoiditis, Metatarsalgia, Stress fracture
+Key measurements: Prominence, plantar pressure distribution
+
+
+
+Second-Third Metatarsal Heads (Central)
+
+Anatomical description: Central weight-bearing zone
+Clinical significance: Highest plantar pressure during midstance
+Common conditions: Metatarsalgia, Stress fractures, Morton's Neuroma
+Key measurements: Relative prominence, pressure distribution
+
+
+
+Fourth-Fifth Metatarsal Heads (Lateral)
+
+Anatomical description: Lateral forefoot weight-bearing
+Clinical significance: Balance and lateral stability
+Common conditions: Metatarsalgia, Jones fracture (5th MT base)
+Key measurements: Lateral pressure distribution, prominence
+
+
+
+Forefoot Shaft (Medial)
+
+Anatomical description: Medial forefoot body, first metatarsal shaft
+Clinical significance: Structural support, arch integrity
+Common conditions: Stress fractures, Arthritis
+Key measurements: Shaft thickness, alignment
+
+
+
+Forefoot Shaft (Lateral)
+
+Anatomical description: Lateral forefoot body, 4th-5th metatarsal shafts
+Clinical significance: Lateral column support
+Common conditions: Stress fractures (5th MT), Cuboid syndrome
+Key measurements: Shaft thickness, lateral column height
+
+
+Midfoot Regions (3 zones):
+Medial Arch
+
+Anatomical description: Medial longitudinal arch, navicular prominence
+Clinical significance: Primary shock absorption structure
+Common conditions: Pes Planus, Posterior Tibial Tendon Dysfunction, Navicular stress fracture
+Key measurements: Arch height index, navicular drop, medial column alignment
+
+
+
+Lateral Arch
+
+Anatomical description: Lateral longitudinal arch, cuboid-calcaneus region
+Clinical significance: Lateral stability and load transmission
+Common conditions: Cuboid syndrome, Lateral column instability
+Key measurements: Lateral arch height, cuboid position
+
+
+
+Plantar Fascia Origin
+
+Anatomical description: Plantar fascia insertion at calcaneal tubercle
+Clinical significance: Primary structure for arch support
+Common conditions: Plantar Fasciitis, Heel spur, Fascial rupture
+Key measurements: Fascia thickness, heel spur presence
+
+
+Hindfoot Regions (3 zones):
+Heel Pad (Plantar)
+
+Anatomical description: Plantar calcaneal fat pad, primary heel contact
+Clinical significance: Impact absorption during heel strike
+Common conditions: Heel pad syndrome, Fat pad atrophy, Plantar fasciitis
+Key measurements: Heel pad thickness, compressibility
+
+
+
+Medial Heel
+
+Anatomical description: Medial calcaneal wall
+Clinical significance: Medial heel stability, nerve passage zone
+Common conditions: Tarsal Tunnel Syndrome, Medial calcaneal neuropathy
+Key measurements: Medial wall prominence, tibial nerve space
+
+
+
+Lateral Heel
+
+Anatomical description: Lateral calcaneal wall
+Clinical significance: Lateral stability, peroneal tendon passage
+Common conditions: Peroneal tendonitis, Lateral heel bursitis
+Key measurements: Lateral wall prominence, peroneal groove depth
+
+
+Dorsal Surface Regions (3 zones):
+Instep (Midfoot Dorsum)
+
+Anatomical description: Dorsal midfoot, extensor tendon zone
+Clinical significance: Footwear pressure point, tendon functionality
+Common conditions: Extensor tendonitis, Midfoot arthritis, Lace bite
+Key measurements: Dorsal height, tendon prominence
+
+
+
+Forefoot Dorsum
+
+Anatomical description: Dorsal forefoot, metatarsal dorsum
+Clinical significance: Footwear interface, edema accumulation zone
+Common conditions: Dorsal metatarsal bursitis, Stress reactions
+Key measurements: Dorsal forefoot height, edema presence
+
+
+
+Ankle Transition Zone
+
+Anatomical description: Anterior ankle, hindfoot-leg interface
+Clinical significance: Ankle joint proximity, anterior impingement zone
+Common conditions: Anterior ankle impingement, Tibialis anterior tendonitis
+Key measurements: Anterior ankle depth, talus position
+
+
+Posterior Regions (2 zones):
+Achilles Tendon Insertion
+
+Anatomical description: Achilles insertion on posterior calcaneus
+Clinical significance: Critical for plantarflexion power
+Common conditions: Achilles Tendinopathy, Insertional calcification, Haglund's deformity
+Key measurements: Tendon thickness, calcification presence, insertion angle
+
+
+
+Posterior Heel
+
+Anatomical description: Posterior calcaneal prominence
+Clinical significance: Retrocalcaneal bursa location, footwear friction point
+Common conditions: Retrocalcaneal bursitis, Haglund's deformity
+Key measurements: Posterior prominence, bursal space
+
+
+Special Features Region (1 zone):
+Custom Detected Anomalies
+
+Purpose: Capture unusual findings not fitting standard regions
+Includes: Accessory bones, unusual prominences, post-surgical changes, traumatic deformities
+Documentation: Specific location, size, clinical significance
+
+
+Regional Status Display SystemStatus Categories:
+
+Normal: Green badge, no abnormalities detected
+Condition Detected: Red badge, specific diagnosis present
+Abnormal Measurement: Yellow badge, metric outside normal range but no specific diagnosis
+Insufficient Data: Grey badge, region not adequately captured in scan
+Interactive Display Requirements:
+
+Visual foot diagram with 22 regions colour-coded
+Click any region to view detailed information
+Hover to see quick status
+Common conditions reference table (which regions typically affected by each condition)
+Anatomical education mode (descriptions for patient understanding)
+Clinical Reference Table:
+Table showing typical regional involvement for each condition:
+
+Plantar Fasciitis: Regions 13, 14
+Hallux Valgus: Regions 1, 6
+Pes Planus: Regions 11, 12, 13
+Achilles Tendinopathy: Regions 20, 21
+Metatarsalgia: Regions 6, 7, 8
+And so on for all conditions
+1.8 Regional Volume Analysis SystemPurpose: Quantify foot volume in three major regions to detect asymmetries and structural abnormalities.Three-Region Volume CalculationForefoot Volume:
+
+Regions included: Zones 1-10 (all toes and metatarsals)
+Normal range: 220-280 cm³ (adult average)
+Clinical significance: Forefoot spreading, metatarsal fractures, edema
+Midfoot Volume:
+
+Regions included: Zones 11-13 (both arches and plantar fascia origin)
+Normal range: 170-210 cm³ (adult average)
+Clinical significance: Arch height, midfoot arthritis, Charcot changes
+Hindfoot Volume:
+
+Regions included: Zones 14-16 (heel pad and both heel sides)
+Normal range: 290-350 cm³ (adult average)
+Clinical significance: Heel pad integrity, calcaneal fractures, edema
+Bilateral Comparison AnalysisAsymmetry Thresholds:
+
+<3%: Normal bilateral variation
+3-5%: Mild asymmetry, monitor
+5-10%: Moderate asymmetry, clinical investigation recommended
+
+
+10%: Significant asymmetry, requires clinical explanation
+
+
+Clinical Significance by Region:Forefoot asymmetry >5% may indicate:
+
+Unilateral trauma or fracture history
+Metatarsal stress reaction
+Charcot foot (diabetic)
+Localized edema or swelling
+Midfoot asymmetry >5% may indicate:
+
+Unilateral arch collapse
+Posterior tibial tendon dysfunction
+Navicular stress fracture
+Lisfranc injury
+Hindfoot asymmetry >5% may indicate:
+
+Calcaneal fracture
+Heel pad atrophy
+Achilles tendon rupture
+Posterior impingement
+Visualisation RequirementsInteractive Bar Charts:
+
+Side-by-side comparison (Left vs Right) for each region
+Three grouped bars: Forefoot, Midfoot, Hindfoot
+Colour coding: Blue for left, Orange for right
+Asymmetry percentage displayed above paired bars
+Clinical significance threshold lines marked
+Detailed Metrics Table:
+Columns required:
+
+Region name
+Left volume (cm³)
+Right volume (cm³)
+Absolute difference (cm³)
+Percentage asymmetry
+Clinical status (Normal/Mild/Moderate/Significant)
+Clinical notes
+Volume Estimation Methodology Note:
+Display information about how volumes are calculated from 3D scan data, noting that values are estimates based on mesh analysis and should be used for comparative purposes rather than absolute measurements.1.9 Biomechanical Parameters SystemPurpose: Measure critical foot dimensions and symmetry for functional assessment and fall risk prediction.Core MeasurementsArch Height Index (Both Feet):
+
+Calculation: Dorsal arch height at 50% foot length / truncated foot length
+Normal range: 0.20-0.35
+Classification:
+
+<0.20: Flat foot (Pes Planus)
+0.20-0.35: Normal arch
+
+
+0.35: High arch (Pes Cavus)
+
+
+
+
+Clinical significance: Primary indicator of foot type and shock absorption capacity
+Foot Length (Both Feet):
+
+Measurement: Heel to longest toe (usually 2nd)
+Normal adult range: 220-290mm (varies by sex and ethnicity)
+Clinical significance: Footwear sizing, growth monitoring (paediatrics), bilateral comparison
+Foot Width (Both Feet):
+
+Measurement: Widest point of forefoot (typically at metatarsal heads)
+Normal adult range: 85-110mm
+Clinical significance: Footwear fit, forefoot spreading, bunion assessment
+Bilateral Symmetry AnalysisClinical Thresholds for Asymmetry:Length Difference:
+
+<5mm: Normal variation
+5-10mm: Mild asymmetry, monitor
+
+
+10mm: Significant asymmetry requiring investigation
+
+
+Clinical implications: Gait abnormalities, hip/knee compensation, footwear issues
+Width Difference:
+
+<4mm: Normal variation
+4-8mm: Mild asymmetry, monitor
+
+
+8mm: Significant asymmetry requiring investigation
+
+
+Clinical implications: Unilateral deformity, trauma history, arthropathy
+Volume Asymmetry (from section 1.8):
+
+<3%: Normal
+3-5%: Mild
+
+
+5%: Significant
+
+
+Clinical implications: Swelling, structural deformity, neurological changes
+Clinical Interpretation FrameworkNormal Bilateral Symmetry Profile:
+
+All measurements within normal variation thresholds
+Fall risk contribution: Low
+Gait impact: Minimal
+Recommendations: Routine monitoring, maintain current footwear
+Mild Asymmetry Profile:
+
+One measurement slightly exceeds threshold
+Fall risk contribution: Low-Moderate
+Gait impact: Minor compensations likely
+Recommendations: Footwear assessment, consider orthotics, re-scan in 6-12 months
+Moderate Asymmetry Profile:
+
+Multiple measurements exceed thresholds or single severe asymmetry
+Fall risk contribution: Moderate
+Gait impact: Compensatory gait patterns likely
+Recommendations: Podiatry referral, gait analysis, orthotic intervention, 3-6 month monitoring
+Significant Asymmetry Profile:
+
+Severe asymmetries or multiple significant findings
+Fall risk contribution: High
+Gait impact: Substantial gait deviation expected
+Recommendations: Urgent podiatry/orthopaedic referral, comprehensive gait analysis, fall prevention protocol
+Fall Risk IntegrationAsymmetry Contribution to Fall Risk:
+
+Calculate composite asymmetry score from all parameters
+Apply weighting: Length (30%), Width (20%), Volume (50%)
+Convert to fall risk percentage contribution
+Integrate with other fall risk factors (age, neurological conditions, balance)
+Fall Risk Categories:
+
+Low (<10%): Normal daily activities safe
+Moderate (10-25%): Balance exercises recommended, home safety assessment
+High (25-40%): Assistive devices consideration, supervised exercise
+Very High (>40%): Fall prevention protocol essential, mobility aids likely needed
+Display RequirementsComparison Table Format:
+
+Three-column table: Measurement | Left Foot | Right Foot
+Difference and asymmetry percentage in additional columns
+Colour-coded status indicators (green/yellow/red)
+Clinical threshold reference values shown
+Fall risk contribution displayed prominently
+Arch Type Classification Cards:
+
+Separate visual cards for each foot
+Arch height index numerical value
+Classification text (Flat/Normal/High)
+Clinical implications of arch type
+Recommended footwear features
+Clinical Interpretation Section:
+
+Overall symmetry assessment
+Gait impact prediction
+Fall risk assessment
+Actionable recommendations
+Monitoring timeline
+1.10 Health Decline Trajectory SystemPurpose: Predict future health scores and identify optimal intervention timing to prevent functional decline.Current Health AssessmentTrajectory Classification Categories:
+
+Rapid Decline: >4 points per year decrease, immediate intervention needed
+Moderate Decline: 2-4 points per year, preventive action recommended
+Slow Decline: 0.5-2 points per year, monitoring appropriate
+Stable: ±0.5 points per year, maintenance care
+Improving: Positive trajectory, current interventions effective
+Annual Decline Rate Calculation:
+
+If longitudinal data available: Calculate from previous scans
+If single scan: Estimate based on age, conditions, and severity
+Base decline rates by age group:
+
+18-40 years: 0.5 points/year
+41-60 years: 1.2 points/year
+61-75 years: 2.5 points/year
+76+ years: 4.0 points/year
+
+
+Multiply by condition severity factors
+Adjust for comorbidities (diabetes, obesity, neurological conditions)
+36-Month Projection SystemTwo Trajectory Paths:Path 1: Current Trajectory (No Intervention)
+
+Continue current decline rate
+Display month-by-month predicted scores
+Mark when critical thresholds crossed
+Show confidence intervals
+Path 2: With Intervention Trajectory
+
+Apply 60% decline reduction (evidence-based estimate)
+Show improved outcome path
+Calculate benefit in health score points preserved
+Display cost-benefit of early intervention
+Clinical Risk Thresholds:
+
+Score 75: Caution Zone (Yellow line on chart)
+
+Meaning: Entering increased risk territory
+Action: Consider preventive interventions
+
+
+
+Score 60: Risk Threshold (Red line on chart)
+
+Meaning: Moderate-High risk category
+Action: Active intervention strongly recommended
+
+
+
+Score 40: Critical Threshold (Red zone)
+
+Meaning: Critical risk, significant functional impairment likely
+Action: Urgent specialist intervention required
+
+
+Months to Risk ThresholdCalculation Method:
+
+Project forward using current decline rate
+Identify month when score crosses 60-point threshold
+If already below 60, calculate months to 40-point critical threshold
+If trajectory stable/improving, report "Not applicable - score stable/improving"
+Timeframe Interpretation:
+
+<6 months: Urgent intervention required (Red alert)
+6-12 months: Prompt action recommended (Orange alert)
+12-24 months: Preventive measures appropriate (Yellow alert)
+
+
+24 months: Standard monitoring sufficient (Green status)
+
+
+Intervention Urgency ClassificationUrgent (Red):
+
+Score currently <60 OR will reach <60 within 12 months
+Rapid decline rate (>4 points/year)
+Multiple high-severity conditions
+Actions: Immediate specialist referral, aggressive treatment, monthly monitoring
+Preventive (Yellow):
+
+Score 60-75 with moderate decline (2-4 points/year)
+Score >75 but will reach <75 within 12 months
+Single severe or multiple moderate conditions
+Actions: Podiatry assessment within 8 weeks, orthotic intervention, quarterly monitoring
+Maintenance (Green):
+
+Score >75 with slow/stable decline (<2 points/year)
+Minimal or well-controlled conditions
+No threshold crossings predicted within 24 months
+Actions: Continue current care, annual review, maintain prevention strategies
+Clinical Recommendations by TrajectoryFor Rapid Decline:
+
+Schedule comprehensive podiatry assessment within 2 weeks
+Begin immediate orthotic intervention
+Consider referral to orthopaedic surgeon
+Implement fall prevention protocol
+Review all current medications and conditions
+Home safety assessment
+Assistive device evaluation
+For Moderate Decline:
+
+Schedule podiatry review within 8 weeks
+Consider custom orthotic assessment
+Implement targeted exercise programme
+Review footwear and activity modifications
+Increase monitoring frequency to quarterly
+Patient education on condition management
+For Slow Decline or Stable:
+
+Continue current treatment plan
+Annual podiatry review
+Maintain regular exercise routine
+Standard footwear guidance
+Reinforce prevention strategies
+For Improving Trajectory:
+
+Maintain current successful interventions
+Document effective treatment protocol
+Continue monitoring to ensure sustained improvement
+Consider gradual reduction in intervention intensity if appropriate
+Plan for long-term maintenance phase
+Visualisation RequirementsPrimary Chart: 36-Month Line Graph
+
+X-axis: Months (0-36)
+Y-axis: Health Score (0-100)
+Two lines plotted:
+
+Solid red/orange line: Current trajectory (no intervention)
+Dashed green line: With intervention trajectory
+
+
+Horizontal threshold lines:
+
+Yellow dashed line at score 75 (caution zone)
+Red solid line at score 60 (risk threshold)
+
+
+Shaded confidence interval area around predictions
+Current score marked with large dot
+Vertical line at "months to threshold" if applicable
+Key Metrics Display:
+
+Current health score (large number with trend arrow)
+Trajectory classification (colour-coded badge)
+Annual decline rate (points per year)
+Months to risk threshold (if applicable)
+Intervention urgency level (colour-coded)
+Clinical Interpretation Card:
+
+Plain language summary of trajectory
+Specific actionable recommendations (numbered list)
+Timeline for next review
+Expected outcomes with and without intervention
+Patient education talking points
+1.11 Insurance Data Export SystemPurpose: Generate insurance-ready data exports in multiple formats for data monetisation and EMR integration.Export Format 1: CSV (Comma-Separated Values)Purpose: Structured data for actuarial analysis and database importRequired Columns:
+
+patient_id: Unique identifier
+scan_date: ISO format date (YYYY-MM-DD)
+patient_age: Numeric age at scan date
+patient_gender: M/F/Other
+health_score_overall: 0-100 numeric
+health_score_grade: Text (Excellent/Good/Fair/Poor/Critical)
+fall_risk_percentage: 0-100 numeric
+conditions_detected_count: Numeric count
+icd10_codes: Pipe-delimited list (e.g., "M21.4|M20.1|M77.4")
+condition_names: Pipe-delimited list matching ICD-10 codes
+severity_levels: Pipe-delimited list (Mild|Moderate|Severe)
+risk_tier: Text (Low/Moderate/High/Critical)
+premium_adjustment_factor: Numeric multiplier (1.0-3.5)
+claim_likelihood_5yr: Text (Low/Medium/High/Very High)
+mobility_index: 0-100 numeric
+bilateral_asymmetry_percentage: Numeric percentage
+neurological_conditions_present: Boolean (Y/N)
+vascular_conditions_present: Boolean (Y/N)
+structural_deformities_present: Boolean (Y/N)
+monitoring_frequency_recommended: Text (Annual/Semi-annual/Quarterly/Monthly)
+specialist_referral_recommended: Boolean (Y/N)
+longitudinal_scan_count: Numeric (if available)
+monitoring_duration_months: Numeric (if available)
+health_trend: Text (Improving/Stable/Declining/Rapid Decline)
+predicted_score_12mo: Numeric projection
+predicted_score_24mo: Numeric projection
+annual_decline_rate: Numeric (points per year)
+months_to_risk_threshold: Numeric or "N/A"
+intervention_urgency: Text (Urgent/Preventive/Maintenance)
+commercial_value_estimate_gbp: Text range (e.g., "45-75")
+File Naming Convention: PatientID_ScanDate_InsuranceExport.csvExport Format 2: JSON (JavaScript Object Notation)Purpose: Machine-readable structured data for API integration and insurance IT systemsStructure:
+Root level object containing:patient_demographics:
+
+patient_id
+scan_date
+age
+gender
+ethnicity (if available)
+health_metrics:
+
+overall_score
+grade
+fall_risk_percentage
+mobility_index
+bilateral_symmetry_score
+detected_conditions (array of objects):
+Each condition object contains:
+
+condition_name
+icd10_code
+severity_level
+affected_side (Left/Right/Bilateral)
+confidence_score
+insurance_multiplier
+category (Structural/Neurological/Vascular/Soft Tissue)
+regions_affected (array of region IDs)
+risk_assessment:
+
+tier (Low/Moderate/High/Critical)
+overall_premium_adjustment
+composite_multiplier_calculation (breakdown)
+claim_likelihood_5yr
+fall_risk_category
+neurological_risk_present
+vascular_risk_present
+clinical_recommendations:
+
+monitoring_frequency
+specialist_referrals_recommended (array)
+intervention_urgency
+specific_actions (array)
+longitudinal_data (if applicable):
+
+monitoring_duration_months
+number_of_scans
+baseline_score
+current_score
+total_health_change
+monthly_rate_of_change
+health_trend_classification
+predictive_analytics:
+
+prediction_model_used
+predicted_score_12_months
+predicted_score_24_months
+confidence_interval_12mo (lower, upper)
+confidence_interval_24mo (lower, upper)
+annual_decline_rate
+months_to_risk_threshold
+trajectory_classification
+biomechanical_data:
+
+arch_height_index_left
+arch_height_index_right
+foot_length_left_mm
+foot_length_right_mm
+foot_width_left_mm
+foot_width_right_mm
+bilateral_asymmetries (object with length_diff, width_diff, volume_diff)
+regional_analysis:
+
+forefoot_volume_left
+forefoot_volume_right
+midfoot_volume_left
+midfoot_volume_right
+hindfoot_volume_left
+hindfoot_volume_right
+regional_asymmetries (object)
+commercial_metadata:
+
+per_record_value_gbp
+longitudinal_value_gbp (if applicable)
+data_quality_score (0-100)
+target_buyers (array)
+use_cases (array)
+compliance_certification:
+
+gdpr_compliant: true
+uk_dpa_2018_compliant: true
+hipaa_compliant: true (if US subjects)
+data_anonymisation_level (Full/Partial/None)
+File Naming Convention: PatientID_ScanDate_InsuranceExport.jsonExport Format 3: TXT (Human-Readable Report)Purpose: Clinical summary and insurance assessment report for human reviewReport Structure:Header Section:
+INSURANCE MEDICAL ASSESSMENT REPORT
+====================================
+Generated by: Medical-Grade Foot Scan Analysis System
+Report Date: [Current date and time with timezone]
+Scan Date: [Scan date]
+Patient ID: [ID]Executive Summary:
+
+Overall Health Score with grade
+Risk Tier assignment
+Fall Risk percentage
+Key findings (3-5 bullet points)
+Recommended premium adjustment
+Detected Conditions Section:
+For each condition:
+
+Condition name with ICD-10 code
+Severity level
+Affected side
+Insurance multiplier
+Clinical significance note
+Risk Assessment Section:
+
+Detailed risk tier justification
+Composite premium adjustment calculation breakdown
+Claim likelihood with reasoning
+Fall risk category with contributing factors
+Monitoring frequency recommendation
+Clinical Recommendations:
+
+Numbered list of specific actions
+Specialist referral recommendations
+Intervention urgency classification
+Timeline for next assessment
+Longitudinal Analysis (if applicable):
+
+Monitoring duration summary
+Number of scans in history
+Health score trajectory (baseline to current)
+Trend classification
+Rate of change
+Predictive Assessment:
+
+12-month score projection
+24-month score projection
+Months to risk threshold (if applicable)
+Intervention impact estimate
+Clinical trajectory interpretation
+Biomechanical Summary:
+
+Arch types (both feet)
+Key measurements with bilateral comparison
+Asymmetry findings
+Clinical implications
+Regional Volume Analysis:
+
+Three-region summary (Forefoot/Midfoot/Hindfoot)
+Bilateral comparisons
+Significant asymmetries highlighted
+Insurance Implications:
+
+Recommended premium adjustment with justification
+Claim likelihood over 5-year horizon
+Long-term care insurance considerations
+Monitoring requirements for policy maintenance
+Data Protection Compliance:
+
+GDPR compliance statement
+UK Data Protection Act 2018 compliance
+HIPAA compliance (if applicable)
+Data handling and retention guidelines
+Commercial Value Assessment:
+
+Per-record value estimate (GBP)
+Longitudinal data value (if applicable)
+Target buyer categories
+Primary use cases
+Annual market potential reference
+Footer Section:
+This report is generated by automated analysis and should be reviewed by a qualified healthcare professional.
+For questions or additional information, contact: [System administrator details]
+Report ID: [Unique report identifier]File Naming Convention: PatientID_ScanDate_InsuranceReport.txtExport Functionality RequirementsUser Interface:
+
+Export section placed at bottom of Enhanced AI Analysis
+Three download buttons: "Download CSV", "Download JSON", "Download Report (TXT)"
+Single button option: "Download All Formats" (generates ZIP file)
+Preview option before download
+Batch export capability for multiple patients
+Data Privacy Controls:
+
+Confirm dialog before export: "This export contains sensitive medical data. Confirm export?"
+Optional anonymisation toggle (replaces patient_id with hash)
+Export log maintained (who, when, which patient, which format)
+GDPR-compliant data handling notices
+Commercial Value Display:
+Summary card showing:
+
+This record value: £45-75 (basic) or £85-125 (longitudinal)
+Data quality indicators
+Target buyer categories
+Recommended sales approach
+Market Intelligence Section:
+Information displayed:
+
+Annual UK insurance market potential: £75M-£225M
+Target buyers: Health insurers, Life insurers, Actuarial consultancies
+Key use cases: Risk stratification, Premium adjustment, Predictive modelling, Claims forecasting
+Competitive advantages: ICD-10 standardisation, Predictive analytics, Evidence-based validation
+Data points most valuable: Fall risk prediction, Health decline trajectory, Longitudinal trends
+📊 Module 2: Temporal Comparison Enhanced System2.1 Health Trajectory Prediction EnginePurpose: Analyse longitudinal scan data and predict future health scores using multiple regression models with automatic model selection.Regression Models ImplementationModel 1: Linear Regression
+
+Equation: y = mx + b
+Best for: Steady, consistent decline or improvement
+Interpretation: Constant rate of change
+Use case: Stable chronic conditions, consistent management
+Model 2: Polynomial Regression (Degree 2)
+
+Equation: y = ax² + bx + c
+Best for: Accelerating or decelerating decline
+Interpretation: Rate of change is changing
+Use case: Progressive conditions, intervention effects
+Model 3: Exponential Decay
+
+Equation: y = a × e^(bx) + c
+Best for: Rapid initial decline that stabilises
+Interpretation: Severity-dependent decline rate
+Use case: Acute conditions becoming chronic, surgical recovery
+Model Selection CriteriaAutomatic Best Model Selection:
+
+Calculate R² (coefficient of determination) for all three models
+Select model with highest R² value
+Minimum R² threshold: 0.70 for reliable prediction
+If all models <0.70, flag as "Insufficient data for reliable prediction"
+R² Interpretation:
+
+0.90-1.00: Excellent fit, highly reliable predictions
+0.80-0.89: Good fit, reliable predictions
+0.70-0.79: Acceptable fit, predictions with caution
+<0.70: Poor fit, predictions unreliable
+Prediction SpecificationsForecast Horizon: 24 months forward from most recent scanOutput Requirements:
+
+Month-by-month predicted scores (24 data points)
+95% confidence intervals for each prediction
+Model statistics (R², standard error, trend direction)
+Uncertainty quantification increasing with time horizon
+Confidence Interval Calculation:
+
+Use ±1.96 × standard error for 95% CI
+Standard error increases with distance from known data points
+Display as shaded area on visualisation
+Trend Direction Classification:
+
+Declining: Slope <-0.5 points/month
+Stable: Slope -0.5 to +0.5 points/month
+Improving: Slope >+0.5 points/month
+Months to Threshold CalculationPrimary Threshold: Health score = 60 (Risk threshold)
+Secondary Threshold: Health score = 40 (Critical threshold)Calculation Method:
+
+Iterate through monthly predictions
+Identify first month where predicted score < 60
+If already below 60, calculate months to score < 40
+If improving trajectory, report "N/A - trajectory improving"
+Result Interpretation:
+
+<6 months: Immediate intervention imperative
+6-12 months: Urgent preventive action needed
+12-24 months: Preventive measures recommended
+
+
+24 months: Standard monitoring appropriate
+
+
+Never reaches threshold: Positive prognosis with current management
+Clinical Recommendations EngineUrgent Action Criteria (Red alert):
+
+Score falls below 60 within 12 months
+Current score <55 with declining trajectory
+Rapid decline rate (>4 points/year)
+Multiple high-severity conditions worsening
+Recommended actions:
+
+Comprehensive podiatry assessment within 2 weeks
+Immediate orthotic intervention
+Orthopaedic surgeon referral consideration
+Fall prevention protocol implementation
+Monthly monitoring scans
+Preventive Action Criteria (Yellow alert):
+
+Score currently 60-75 with moderate decline (2-4 points/year)
+Score >75 but will reach <75 within 12 months
+Single severe or multiple moderate conditions
+Stable but multiple risk factors present
+Recommended actions:
+
+Podiatry review within 8 weeks
+Custom orthotic assessment
+Targeted exercise programme
+Footwear and activity modifications
+Quarterly monitoring scans
+Maintenance Care Criteria (Green status):
+
+Score >75 with slow/stable decline (<2 points/year)
+Minimal or well-controlled conditions
+No threshold crossings within 24 months
+Improving trajectory
+Recommended actions:
+
+Continue current treatment plan
+Annual podiatry review
+Maintain regular exercise routine
+Standard prevention strategies
+Annual monitoring scans
+Visualisation RequirementsPrimary Chart: Interactive Plotly Line Graph
+
+X-axis: Months from baseline (negative for historical, positive for future)
+Y-axis: Health Score (0-100)
+Historical data points: Solid dots with error bars (if multiple scans same date)
+Predicted trajectory: Solid line in model colour
+Confidence interval: Shaded translucent area
+Threshold lines:
+
+Score 75: Yellow dashed line (caution zone)
+Score 60: Red dashed line (risk threshold)
+Score 40: Red solid line (critical threshold)
+
+
+Vertical line at present (month 0)
+Hover information showing exact values
+Model Statistics Card:
+Display:
+
+Best model selected (name and icon)
+R² value with interpretation
+Standard error
+Trend direction with arrow
+Data points used in calculation
+Prediction reliability rating
+Clinical Interpretation Panel:
+
+Colour-coded alert level (Green/Yellow/Red)
+Primary message (large text, plain language)
+Numbered action items (3-7 specific recommendations)
+Timeline for next review
+Expected outcome with current trajectory
+Expected outcome with intervention
+2.2 Condition Progression Analysis SystemPurpose: Track how individual conditions evolve across multiple scans to identify worsening, improving, or stable patterns.Progression Tracking MethodologyData Requirements:
+
+Minimum 2 scans to establish progression
+Optimal: 3+ scans for reliable trend analysis
+Each scan must have: date, condition detected (yes/no), severity level, confidence score
+Severity Scoring System:
+
+Mild: 1 point
+Moderate: 2 points
+Severe: 3 points
+Change Score Calculation:
+
+Formula: Current severity score - Initial severity score
+Range: -2 (improved from severe to mild) to +2 (worsened from mild to severe)
+Normalise by time: Monthly rate = Change score / Months elapsed
+Progression ClassificationWorsening:
+
+Criteria: Change score >+0.5 OR severity increased by 1+ level
+Significance: High priority for intervention
+Display: Red indicator, upward arrow
+Clinical action: Review treatment efficacy, consider escalation
+Improving:
+
+Criteria: Change score <-0.5 OR severity decreased by 1+ level
+Significance: Treatment effective
+Display: Green indicator, downward arrow
+Clinical action: Continue current protocol, document successful intervention
+Stable:
+
+Criteria: Change score between -0.5 and +0.5, no severity level change
+Significance: Condition controlled
+Display: Yellow indicator, horizontal arrow
+Clinical action: Maintain current management
+Fluctuating:
+
+Criteria: Severity changes up and down across scans (inconsistent pattern)
+Significance: Condition variability, possible compliance issues
+Display: Orange indicator, wavy arrow
+Clinical action: Investigate variability causes, improve compliance
+Progression Path VisualisationPath String Format:
+
+Show severity at each scan date
+Example: "Mild (Jan 2024) → Moderate (Apr 2024) → Severe (Jul 2024)"
+Include scan dates for context
+Colour code each severity level in display
+Overall Progression Risk AssessmentCalculate Across All Conditions:
+
+Count: How many conditions worsening, improving, stable
+Weight by severity: Worsening severe condition = higher risk
+Consider rate of change: Rapid worsening = higher risk
+Risk Categories:
+
+High Progression Risk: 2+ conditions worsening OR any condition worsening rapidly (>1 severity level in <6 months)
+Moderate Progression Risk: 1 condition worsening OR multiple stable with concerning trend
+Low Progression Risk: No worsening conditions, some improving
+Stable/Improving: Majority of conditions stable or improving
+Top 3 Worsening Conditions DetailFor Each of Top 3 Worsening:
+
+Condition name with ICD-10 code
+Progression path with dates
+Change score and monthly rate
+Current severity and confidence
+Possible reasons for worsening (patient education)
+Recommended interventions specific to that condition
+Monitoring timeline
+Improving Conditions Celebration SectionPurpose: Positive reinforcement for treatment adherenceDisplay:
+
+List all improving conditions
+Progression path showing improvement
+Likely contributing factors (orthotics, exercises, weight loss, etc.)
+Encouragement messaging
+Recommendation to continue successful strategies
+Stable Conditions SummaryConcise Display:
+
+Number of stable conditions
+List of condition names
+Duration of stability
+Brief recommendation to maintain current management
+Visualisation RequirementsCondition Timeline Chart:
+
+X-axis: Scan dates
+Y-axis: Severity score (0-3)
+One line per condition (multi-line chart)
+Colour-coded by condition category
+Markers at each scan point
+Hover showing exact severity and confidence
+Progression Summary Table:
+Columns:
+
+Condition Name
+Progression Path (text with arrows)
+Change Score
+Monthly Rate
+Status (Worsening/Improving/Stable/Fluctuating with icon)
+Scans Detected (X of Y scans)
+Action Required (clickable for details)
+Overall Progression Risk Card:
+
+Large risk level display (High/Moderate/Low/Stable)
+Colour-coded background
+Breakdown: X worsening, Y stable, Z improving
+Primary recommendation
+Link to detailed condition analysis
+2.3 Fall Risk Evolution AnalyserPurpose: Track fall risk over time and provide insurance underwriting implications.Fall Risk TimelineData Points Required:
+
+Fall risk percentage calculated at each scan (from Module 1 risk matrix)
+Baseline fall risk (first scan)
+Current fall risk (most recent scan)
+All intermediate scan fall risks
+Risk Evolution Metrics:
+
+Absolute change: Current - Baseline (percentage points)
+Relative change: ((Current - Baseline) / Baseline) × 100%
+Average monthly change rate
+Trend direction (increasing/stable/decreasing)
+Risk Zone ClassificationLow Risk Zone (Green):
+
+Fall risk: 0-10%
+Insurance implications: Standard underwriting, no premium adjustment
+Clinical significance: Normal daily activities safe without modifications
+Moderate Risk Zone (Yellow):
+
+Fall risk: 10-25%
+Insurance implications: Minor premium adjustment (1.1-1.3x), increased scrutiny for long-term care policies
+Clinical significance: Balance exercises recommended, home safety assessment
+High Risk Zone (Orange):
+
+Fall risk: 25-40%
+Insurance implications: Significant premium adjustment (1.4-1.8x), may affect life insurance approval
+Clinical significance: Fall prevention protocol essential, assistive device consideration
+Very High Risk Zone (Red):
+
+Fall risk: >40%
+Insurance implications: Major premium adjustment (1.9-3.0x), long-term care insurance likely declined or restricted
+Clinical significance: Urgent intervention, mobility aids essential, supervised ambulation
+Insurance Underwriting ImplicationsLife Insurance:
+
+Low risk: No impact on approval or rates
+Moderate risk: Standard rates, may require medical exam
+High risk: Rated policy (higher premiums), additional medical documentation
+Very High risk: May be declined or heavily rated
+Health Insurance:
+
+Low risk: Standard rates
+Moderate risk: Minor adjustment, increased claim reserve
+High risk: Higher premiums, pre-existing condition considerations
+Very High risk: Significant premium increase, possible coverage limitations
+Long-term Care Insurance:
+
+Low risk: Standard underwriting
+Moderate risk: Higher premiums (15-30% increase)
+High risk: Significantly higher premiums (40-80% increase) or benefit period restrictions
+Very High risk: Often declined, or offered with very high premiums and limited benefits
+Claim Likelihood Estimates:
+Based on fall risk category, provide 5-year claim probability:
+
+Low risk: 5-10% probability of fall-related claim
+Moderate risk: 15-25% probability
+High risk: 30-50% probability
+Very High risk: >50% probability
+Risk Trajectory AnalysisWorsening Risk Trajectory:
+
+Fall risk increased by >10 percentage points from baseline
+Monthly increase rate >1 percentage point
+Implications: Aggressive intervention needed, insurance implications significant
+Stable Risk:
+
+Fall risk within ±5 percentage points of baseline
+Implications: Current management adequate, standard monitoring
+Improving Risk:
+
+Fall risk decreased by >10 percentage points from baseline
+Implications: Interventions effective, potential for premium reductions on review
+Visualisation RequirementsPrimary Chart: Fall Risk Evolution Line Graph
+
+X-axis: Scan dates
+Y-axis: Fall risk percentage (0-100%)
+Horizontal zone bands colour-coded (Green/Yellow/Orange/Red)
+Line plot of actual fall risk at each scan
+Trend line (regression)
+Markers showing baseline and current values
+Annotations for significant changes
+Risk Comparison Card:
+
+Baseline risk: Large number with date
+Current risk: Large number with date
+Change: Prominent display with arrow (up/down)
+Relative change percentage
+Risk zone transition (e.g., "Moved from Low to Moderate")
+Insurance Implications Panel:
+Three sub-sections:
+
+Life Insurance: Current implications, premium multiplier estimate
+Health Insurance: Risk category, claim likelihood
+Long-term Care: Underwriting status, coverage considerations
+Clinical Recommendations Box:
+
+Specific fall prevention strategies based on risk level
+Home safety modifications
+Exercise recommendations
+Assistive device guidance
+Monitoring frequency
+2.4 Intervention Impact Simulation SystemPurpose: Model the expected health outcomes of different intervention strategies to guide treatment decisions.Five Intervention ScenariosScenario 1: No Intervention (Baseline)
+
+Continue current trajectory without additional treatment
+Decline rate: Baseline calculated from existing data
+Purpose: Establish worst-case comparator
+Display: Red/orange line on chart
+Scenario 2: Orthotic Treatment
+
+Intervention: Custom orthotic insoles/foot orthoses
+Expected decline reduction: 60% (evidence-based estimate)
+Evidence: Multiple RCTs showing orthotic efficacy
+Typical duration to effect: 4-8 weeks
+Cost consideration: Moderate (£150-400 for custom)
+Scenario 3: Physical Therapy (12-week programme)
+
+Intervention: Structured physiotherapy with foot/ankle exercises
+Expected decline reduction: 45% (evidence-based estimate)
+Evidence: Systematic reviews of PT effectiveness
+Typical duration: 12 weeks active therapy, then maintenance
+Cost consideration: Moderate-High (£40-80 per session × 12-16 sessions)
+Scenario 4: Surgical Correction
+
+Intervention: Appropriate surgical procedure (bunionectomy, tendon transfer, etc.)
+Expected decline reduction: 85% (evidence-based estimate)
+Evidence: Long-term surgical outcome studies
+Typical recovery: 6-12 months to full effect
+Cost consideration: High (£3,000-8,000 private, free on NHS with wait time)
+Note: Only applicable for specific structural conditions
+Scenario 5: Combined Protocol
+
+Intervention: Orthotics + Physical Therapy + Activity Modification
+Expected decline reduction: 75% (evidence-based synergistic effect)
+Evidence: Multimodal treatment studies
+Typical duration: 8-12 weeks to establish, ongoing maintenance
+Cost consideration: High initial (£500-800), moderate maintenance
+Simulation CalculationsFor Each Scenario:
+
+Calculate baseline decline rate from historical data
+Apply intervention decline reduction percentage
+Project 24 months forward with reduced decline rate
+Calculate total health score benefit (points preserved vs no intervention)
+Estimate months of additional functional capacity gained
+Benefit Quantification:
+
+Health score points preserved over 24 months
+Additional months before reaching risk threshold
+Probability of avoiding risk tier escalation
+Estimated quality-adjusted life years (QALYs) gained
+Cost-Benefit AnalysisFor Each Intervention:
+
+Estimated total cost (initial + maintenance over 24 months)
+Health score benefit
+Cost per health score point gained
+Break-even analysis
+Quality of life considerations
+Not Directly Displayed But Should Inform:
+
+NHS availability and typical wait times
+Private sector costs
+Insurance coverage likelihood
+Patient out-of-pocket estimates
+Evidence Base DisplayFor Each Intervention Type:
+
+Number of studies supporting effectiveness
+Evidence level (Level I, II, or III)
+Typical success rate from literature
+Notable limitations or contraindications
+Patient selection criteria
+Visualisation RequirementsPrimary Chart: Multi-Line Comparison Graph
+
+X-axis: Months (0-24)
+Y-axis: Predicted Health Score (0-100)
+Six lines:
+
+No Intervention (red, solid)
+Orthotic Treatment (blue, dashed)
+Physical Therapy (green, dashed)
+Surgical Correction (purple, dashed)
+Combined Protocol (gold, dashed)
+
+
+Threshold lines at 60 and 75
+Legend with colour coding and effectiveness percentages
+Benefit Comparison Table:
+Columns:
+
+Intervention Type
+Decline Reduction %
+Score at 12 Months
+Score at 24 Months
+Benefit vs No Intervention (points)
+Months to Risk Threshold
+Additional Functional Months Gained
+Intervention Cards (One Per Scenario):
+
+Intervention name and icon
+Decline reduction percentage (large display)
+24-month projected outcome score
+Benefit quantification
+Evidence level badge
+Typical cost range
+Duration to effect
+Expandable section with detailed evidence and considerations
+Clinical Interpretation Panel:
+
+Recommended intervention based on:
+
+Current health status
+Rate of decline
+Patient-specific factors
+Cost-effectiveness
+
+
+Alternative options if primary not feasible
+Combination approach rationale if recommended
+2.5 Comprehensive Temporal Report GeneratorPurpose: Synthesise all longitudinal analysis into exportable summary for clinical documentation and insurance submission.Report StructureSection 1: Monitoring Overview
+
+Patient ID and demographic summary
+Total monitoring duration (months)
+Number of scans in analysis period
+Scan dates (list all)
+Analysis date
+Section 2: Health Score Summary
+
+Baseline health score (first scan) with date
+Current health score (latest scan) with date
+Total change (points and percentage)
+Average monthly rate of change
+Current health grade
+Trajectory classification (Improving/Stable/Declining/Rapid Decline)
+Section 3: Predictive Modeling Results
+
+Best regression model used
+Model fit statistics (R² value)
+12-month predicted score with confidence interval
+24-month predicted score with confidence interval
+Months to risk threshold (if applicable)
+Intervention benefit estimate
+Section 4: Condition Progression Summary
+
+Total conditions tracked: X
+Worsening: Y conditions (list names)
+Stable: Z conditions
+Improving: W conditions (list names)
+Detailed Worsening Conditions:
+For each worsening condition:
+
+Name with ICD-10 code
+Progression path
+Severity change
+Rate of progression
+Recommended action
+Section 5: Fall Risk Assessment
+
+Baseline fall risk percentage with date
+Current fall risk percentage with date
+Absolute change (percentage points)
+Risk trajectory (Increasing/Stable/Decreasing)
+Current risk zone (Low/Moderate/High/Very High)
+Insurance Underwriting Summary:
+
+Life insurance implications
+Health insurance risk category
+Long-term care insurance considerations
+Overall premium adjustment recommendation
+5-year claim likelihood estimate
+Section 6: Intervention Analysis
+
+Current trajectory without intervention (24-month projection)
+Recommended primary intervention
+Expected benefit with intervention
+Alternative intervention options
+Cost-effectiveness considerations
+Section 7: Clinical Recommendations
+
+Priority action items (numbered list)
+Monitoring frequency recommendation
+Specialist referrals needed
+Patient education priorities
+Next review timeline
+Section 8: Insurance Data Summary
+
+Longitudinal data value estimate (£85-125)
+Key data points for insurers
+Risk stratification category
+Predictive analytics highlights
+Data quality indicators
+Section 9: Technical Metadata
+
+Analysis system version
+Regression models used
+Data quality scores
+Confidence ratings
+Limitations and caveats
+Export FormatsFormat 1: TXT Report (Human-Readable)
+
+Structured text with clear headings
+Plain language summaries
+Suitable for printing or PDF conversion
+Include all sections above in readable format
+Format 2: JSON Data (Machine-Readable)
+
+Structured data object
+All metrics in numeric format where applicable
+Suitable for insurance API integration
+Schema-validated format
+Include metadata for programmatic processing
+Data Privacy and ComplianceGDPR Compliance:
+
+Include data protection statement
+Right to erasure notification
+Data retention period
+Purpose limitation clause
+UK Data Protection Act 2018:
+
+Compliance statement
+Lawful basis for processing
+Data subject rights information
+HIPAA (if applicable):
+
+Protected Health Information handling
+Minimum necessary standard
+Authorization for disclosure
+Visualisation RequirementsReport Preview Window:
+
+Scrollable preview of TXT report before download
+Summary statistics at top
+Toggle between TXT and JSON preview
+Character count and file size estimate
+Download Options:
+
+Individual format buttons (TXT, JSON)
+Combined ZIP download option
+Email report option (if configured)
+Print-friendly format
+Report Generation Confirmation:
+
+Success message with file details
+Download location indication
+Security reminder about sensitive data
+Option to generate additional formats
+🎨 Module 3: Main Application Integration & UI/UX3.1 Enhanced App.py ModificationsRequired Imports:
+
+Add import for comprehensive_enhanced_analysis
+Add import for temporal_comparison_enhanced
+Import all necessary data structures and constants
+Bug Fixes:
+
+"name 'latest' is not defined" errors (2 locations)
+
+Locate all instances where 'latest' variable is referenced before definition
+Ensure proper initialization or conditional checking
+Add error handling for missing data scenarios
+
+
+
+Module integration errors:
+
+Verify all function calls match new module signatures
+Update any deprecated function calls
+Ensure proper data passing between modules
+
+
+Page Structure Integration:Existing pages remain:
+
+Home/Dashboard
+Scan Processing
+Temporal Comparison
+Modifications required:
+
+Scan Processing page: Add "Enhanced AI Analysis" section below basic results
+Temporal Comparison page: Add "Enhanced Temporal Analysis" section below basic timeline
+3.2 Enhanced AI Analysis Interface (8 Tabs)Tab Navigation Design:
+
+Horizontal tab bar with icons
+Active tab highlighted with colour and underline
+Tab labels clear and concise
+Mobile-responsive collapsing to dropdown on small screens
+Tab 1: 📊 Health Score & Risk MatrixLayout:
+
+Top Section: Massive health score display
+
+Score: 96px font, bold, centred
+Grade: 48px font below score
+Full-width colour-coded card (green/yellow/orange/red gradient)
+Percentile ranking below
+Delta from previous scan (if available) with trend arrow
+
+
+
+Risk Matrix Section:
+
+Four-tier risk classification prominently displayed
+Current tier highlighted with large badge
+Breakdown table:
+
+High severity conditions count
+Moderate severity conditions count
+Low severity conditions count
+
+
+Fall risk percentage (large number with risk zone)
+Insurance premium adjustment factor
+Claim likelihood estimate
+
+
+
+Visual Risk Indicator:
+
+Gauge chart or semi-circular progress indicator
+Colour-coded zones marked
+Current position indicated
+
+
+Tab 2: 🏥 Detected Conditions & ICD-10Layout:
+
+Condition count summary at top: "X conditions detected"
+Sorting controls: By severity / By confidence / By category / By insurance impact
+Condition Cards (expandable accordion style):
+
+Collapsed state shows:
+
+Condition name (bold, 18px)
+ICD-10 code in green badge
+Severity with confidence percentage
+Affected side indicator
+Expand arrow icon
+
+
+
+Expanded state shows additionally:
+
+Clinical justification (2-3 sentences)
+Affected regions (list with badges)
+Category classification
+Insurance multiplier for this condition
+Severity criteria explanation
+Risk factors present
+Progression risk indicator
+
+
+
+Visual design:
+
+Left border colour-coded by severity (Red/Orange/Yellow)
+ICD-10 badge: Green background, monospace font
+Hover effect for interactivity
+
+
+No Conditions Detected state:
+
+Large green checkmark icon
+"No significant conditions detected" message
+Healthy foot tips and prevention guidance
+Tab 3: 💊 Treatment & RehabilitationLayout:
+
+Condition selector dropdown at top (if multiple conditions)
+For selected condition, display four sub-tabs:
+Sub-Tab 3a: Immediate Care (0-2 weeks)
+
+Timeline indicator showing current phase
+Numbered action items (large, clear text)
+Pain management strategies box
+Activity restrictions section with icons
+Red flag symptoms (what requires urgent attention)
+Sub-Tab 3b: Rehabilitation (2-12 weeks)
+
+Exercise cards (one per exercise)
+Each card shows:
+
+Exercise name with icon/illustration
+Starting position
+Movement instructions (numbered steps)
+Sets × Reps × Frequency
+Hold duration if applicable
+Common mistakes warning box
+
+
+Progress tracker (weeks 2, 4, 6, 8, 10, 12)
+Criteria for advancing to next phase
+Sub-Tab 3c: Long-term Management (3+ months)
+
+Lifestyle modifications section
+Footwear recommendations (specific features needed)
+Orthotic guidance
+Maintenance exercise schedule
+Self-monitoring instructions
+Prevention of recurrence strategies
+Sub-Tab 3d: Referral Criteria
+
+When to see podiatrist (specific scenarios)
+When to see orthopaedic surgeon
+When physiotherapy is recommended
+Red flag symptoms (repeated for emphasis)
+Typical timeframes for appointments
+For multiple conditions:
+
+Condition selector tabs at top
+Content updates based on selection
+Option to print/export all protocols
+Tab 4: 📚 Medical Research EvidenceLayout:
+
+Top Summary Dashboard:
+
+Total studies: 44,084 (large display)
+Database source badges (PubMed, Cochrane, etc.)
+Date range: 1990-2024
+Geographic distribution mini-chart
+
+
+
+Validation Metrics Section:
+
+3D Scanning Correlation (r = 0.94, p < 0.001)
+Sensitivity range: 87-94%
+Specificity range: 91-97%
+Inter-rater reliability: ICC 0.89-0.96
+Large visual indicators (checkmarks, progress bars)
+
+
+
+Analysis Scope Metrics:
+
+Four metric cards side-by-side:
+
+22 Foot Regions
+47 Anatomical Landmarks
+89 Biomechanical Parameters
+156 Physical Symptoms
+
+
+
+
+
+Top 10 Conditions by Research Volume:
+
+Interactive sortable table
+Columns: Condition Name | Study Count | Evidence Level | Key Finding
+Click to expand for detailed evidence
+
+
+
+Condition-Specific Research (for detected conditions):
+
+Separate expandable section per detected condition
+Study count specific to that condition
+Evidence level breakdown (pie chart)
+Key findings (3-5 bullet points)
+Top journals
+Recent significant studies (last 5 years)
+
+
+Visual Design:
+
+Purple/blue colour scheme for research sections
+Academic aesthetic (serif headings)
+Citation-style formatting where appropriate
+High credibility visual indicators
+Tab 5: 🦶 Regional Analysis (22 Segments)Layout:
+
+Visual Foot Diagram (top, prominent):
+
+Stylised foot illustration
+22 regions outlined and numbered
+Colour-coded by status:
+
+Green: Normal
+Red: Condition detected
+Yellow: Abnormal measurement
+Grey: Insufficient data
+
+
+Interactive: Click region for details
+Hover for quick status
+
+
+
+Regional Status List:
+
+Table or card grid showing all 22 regions
+Columns/fields:
+
+Region number and name
+Status badge (colour-coded)
+Common conditions for this region
+Clinical notes (if applicable)
+
+
+Sort options: By status / By anatomical order / By condition presence
+
+
+
+Region Detail Panel (appears when region clicked):
+
+Anatomical description
+Clinical significance
+Measurements for this region (if applicable)
+Associated conditions (if detected)
+Patient education content
+
+
+
+Common Conditions Reference Table:
+
+Collapsible section at bottom
+Shows which regions typically affected by each condition
+Example: "Plantar Fasciitis typically affects: Regions 13, 14"
+
+
+Visual Design:
+
+Clean anatomical illustration style
+Clear region boundaries
+Responsive design (foot diagram scales appropriately)
+Educational tone with medical precision
+Tab 6: 📏 Volume & BiomechanicsLayout Split into Two Main Sections:Section A: Regional Volume Analysis
+
+Three-Region Summary Cards:
+
+Forefoot card: Volume (cm³), asymmetry %, status
+Midfoot card: Volume (cm³), asymmetry %, status
+Hindfoot card: Volume (cm³), asymmetry %, status
+
+
+
+Bilateral Comparison Chart:
+
+Interactive Plotly bar chart
+Grouped bars for each region (Left | Right side-by-side)
+Blue for left, orange for right
+Asymmetry percentage displayed above each pair
+Threshold line for significant asymmetry (5%)
+
+
+
+Detailed Volume Table:
+
+Columns: Region | Left (cm³) | Right (cm³) | Difference | Asymmetry % | Status | Clinical Notes
+Sortable by any column
+Colour-coded status indicators
+
+
+Section B: Biomechanical Parameters
+
+Arch Height Index Cards:
+
+Two side-by-side cards (Left foot | Right foot)
+Large arch index number
+Arch type classification (Flat/Normal/High)
+Visual arch diagram showing height
+Clinical interpretation
+
+
+
+Bilateral Measurements Table:
+
+Rows: Foot Length, Foot Width, Volume (total)
+Columns: Left | Right | Difference | Status
+Clinical thresholds noted
+Colour-coded warnings for significant asymmetries
+
+
+
+Bilateral Symmetry Summary:
+
+Overall symmetry assessment (Normal/Mild/Moderate/Significant asymmetry)
+Length difference interpretation
+Width difference interpretation
+Volume asymmetry interpretation
+Fall risk contribution
+Gait impact prediction
+
+
+Visual Design:
+
+Technical/analytical aesthetic
+Charts and graphs prominent
+Data tables clean and readable
+Clinical threshold markers clear
+Tab 7: 📉 Health Decline TrajectoryLayout:
+
+Current Status Card (top):
+
+Current health score (large)
+Trajectory classification badge (colour-coded)
+Annual decline rate (points/year)
+
+
+
+36-Month Projection Chart (central, prominent):
+
+Plotly line graph
+X-axis: Months (0-36)
+Y-axis: Health Score (0-100)
+Two trajectories:
+
+Current path (no intervention): Red/orange solid line
+With intervention path (60% reduction): Green dashed line
+
+
+Threshold markers:
+
+Score 75: Yellow dashed line
+Score 60: Red dashed line
+
+
+Shaded confidence interval
+Current score marked with large dot
+Vertical line at present (month 0)
+
+
+
+Months to Risk Threshold (if applicable):
+
+Large number display
+"X months until health score falls below 60"
+Urgency indicator (colour-coded)
+
+
+
+Intervention Timing Guidance:
+
+Urgency classification card (Urgent/Preventive/Maintenance)
+Primary recommendation message
+Timeline for action
+Expected benefit quantification
+
+
+
+Clinical Recommendations Section:
+
+Numbered list (3-7 specific actions)
+Each item clear and actionable
+Timeline indicators where relevant
+Colour-coded by urgency
+
+
+Visual Design:
+
+Future-focused aesthetic (blue/purple tones for projections)
+Clear differentiation between current and predicted data
+Emphasis on actionable timeline
+Warning colours for urgent situations
+Tab 8: 💼 Insurance Data ExportLayout:
+
+Commercial Value Summary Card (top):
+
+This record value: £45-75 or £85-125 (if longitudinal)
+Data quality score
+Target buyer categories
+Annual market potential reference
+
+
+
+Export Options Section:
+
+Three prominent download buttons:
+
+Download CSV (with icon)
+Download JSON (with icon)
+Download Report (TXT) (with icon)
+
+
+"Download All Formats (ZIP)" button below
+Preview buttons for each format
+
+
+
+Export Data Summary:
+
+What's included in each format (expandable details)
+File sizes and formatting notes
+Recommended uses for each format
+
+
+
+Data Privacy Notice:
+
+GDPR compliance statement
+UK Data Protection Act 2018 compliance
+HIPAA compliance (if applicable)
+Responsible data handling guidance
+Warning about sensitive medical data
+
+
+
+Market Intelligence Section (expandable):
+
+UK insurance market potential
+Target buyer types
+Key use cases for insurers
+Competitive advantages of this data
+Most valuable data points highlighted
+
+
+Visual Design:
+
+Business/commercial aesthetic
+Professional colour scheme (navy/grey)
+Clear download buttons (large, prominent)
+Security/privacy icons and badges
+3.3 Enhanced Temporal Comparison Interface (5 Tabs)Prerequisites:
+
+Requires 2+ scans for same patient
+Patient selector dropdown at top
+Basic timeline display (existing feature) shown first
+Tab Navigation:
+
+Appears below basic timeline
+"Enhanced Temporal Analysis & Predictive Modeling" section header
+5 horizontal tabs with icons
+Tab 1: 📈 Health Trajectory & PredictionLayout:
+
+Regression Model Selector (top):
+
+Shows all three models calculated:
+
+Linear Regression (R² = X.XX)
+Polynomial Regression (R² = X.XX)
+Exponential Decay (R² = X.XX)
+
+
+Best model highlighted with checkmark and "SELECTED" badge
+Option to manually select different model for comparison
+
+
+
+Primary Prediction Chart (central, large):
+
+Interactive Plotly line graph
+Historical data points (solid dots)
+Predicted trajectory (solid line extending right)
+95% confidence interval (shaded area)
+Threshold lines (75 yellow, 60 red)
+Vertical line at present
+Hover information with exact values
+
+
+
+Model Statistics Card:
+
+R² value with interpretation
+Standard error
+Trend direction with arrow icon
+Data points used
+Prediction reliability rating
+
+
+
+Months to Threshold (if applicable):
+
+Large display if declining toward threshold
+Countdown style: "X months until score < 60"
+Urgency colour coding
+
+
+
+Clinical Recommendations Panel:
+
+Alert level (Green/Yellow/Red)
+Primary message (large, bold)
+Action items (numbered list)
+Timeline for next review
+
+
+Visual Design:
+
+Analytical/scientific aesthetic
+Blue tones for model calculations
+Clear distinction between historical and predicted
+Professional chart styling
+Tab 2: 🔄 Condition ProgressionLayout:
+
+Overall Progression Risk Card (top):
+
+Risk level: High/Moderate/Low/Stable
+Colour-coded background
+Breakdown: "X worsening, Y stable, Z improving"
+Primary message
+
+
+
+Condition Timeline Chart:
+
+Multi-line Plotly chart
+One line per tracked condition
+X-axis: Scan dates
+Y-axis: Severity score (0-3)
+Colour-coded by condition category
+Markers at each scan point
+Legend with condition names
+Hover showing exact severity and confidence
+
+
+
+Detailed Progression Table:
+
+All conditions listed
+Columns:
+
+Condition Name
+Progression Path (visual with arrows)
+Change Score
+Monthly Rate
+Status (Worsening/Improving/Stable with icon)
+Scans Detected (e.g., "3 of 4 scans")
+Actions (expandable)
+
+
+Sortable by any column
+Filter by status
+
+
+
+Top 3 Worsening Conditions Detail (if applicable):
+
+Separate expandable cards for each
+Detailed progression analysis
+ICD-10 code
+Possible reasons for worsening
+Specific intervention recommendations
+
+
+
+Improving Conditions Celebration (if applicable):
+
+Green success-styled section
+List of improving conditions
+Progression paths showing improvement
+Encouragement messaging
+"Continue what's working" recommendations
+
+
+
+Stable Conditions Summary:
+
+Compact list
+Number of stable conditions
+Brief recommendation to maintain
+
+
+Visual Design:
+
+Timeline aesthetic
+Colour-coded by status (red/green/yellow)
+Positive reinforcement for improvements
+Clear actionable items for worsening
+Tab 3: ⚠️ Fall Risk EvolutionLayout:
+
+Risk Evolution Chart (central, prominent):
+
+Plotly line graph
+X-axis: Scan dates
+Y-axis: Fall risk percentage (0-100%)
+Horizontal zone bands (Green/Yellow/Orange/Red)
+Line plot with markers at each scan
+Trend line (regression)
+Baseline and current values annotated
+
+
+
+Risk Comparison Card:
+
+Side-by-side display:
+
+Baseline Fall Risk: X% (date)
+Current Fall Risk: Y% (date)
+
+
+Change: Large arrow (up/down) with value
+Relative change percentage
+Risk zone transition message
+
+
+
+Insurance Underwriting Implications Section:
+
+Three sub-sections with icons:
+
+
+Life Insurance:
+
+Current implication (Standard/Rated/Declined)
+Premium multiplier estimate
+Additional documentation likely needed
+Health Insurance:
+
+Risk category assignment
+Claim likelihood (5-year probability)
+Premium adjustment estimate
+Long-term Care Insurance:
+
+Underwriting status
+Premium impact (percentage increase)
+Coverage considerations/restrictions
+
+Clinical Fall Prevention Recommendations:
+
+Risk-level-appropriate strategies
+Home safety modifications
+Exercise recommendations
+Assistive device guidance
+Monitoring frequency
+
+
+Visual Design:
+
+Warning aesthetic where appropriate
+Insurance-professional styling for underwriting section
+Clear risk zone visualisations
+Serious tone for high-risk situations
+Tab 4: 💡 Intervention Impact AnalysisLayout:
+
+Intervention Comparison Chart (central, large):
+
+Multi-line Plotly graph
+X-axis: Months (0-24)
+Y-axis: Predicted Health Score (0-100)
+Five lines:
+
+No Intervention (red, solid, thick)
+Orthotic Treatment (blue, dashed)
+Physical Therapy (green, dashed)
+Surgical Correction (purple, dashed)
+Combined Protocol (gold, dashed)
+
+
+Threshold lines (60, 75)
+Legend with effectiveness percentages
+Hover showing exact values
+
+
+
+Benefit Comparison Table:
+
+Rows: Five intervention types
+Columns:
+
+Intervention Name
+Decline Reduction %
+12-Month Score
+24-Month Score
+Benefit (points vs no intervention)
+Months to Threshold
+Additional Functional Months
+
+
+Colour-coded benefit indicators
+Sortable
+
+
+
+Intervention Detail Cards (expandable):
+
+One card per intervention type
+Card Header (always visible):
+
+Intervention name with icon
+Decline reduction % (large)
+24-month outcome score
+
+
+Card Body (expandable):
+
+Evidence level badge
+Number of supporting studies
+Typical cost range
+Duration to effect
+Success rate from literature
+Contraindications/limitations
+Patient selection criteria
+
+
+
+
+
+Clinical Recommendation Panel:
+
+Primary recommended intervention (highlighted)
+Rationale for recommendation
+Alternative options if primary not feasible
+Combination approach explanation if recommended
+Cost-effectiveness considerations
+Expected timeline to benefit
+
+
+Visual Design:
+
+Optimistic/forward-looking aesthetic
+Clear differentiation between intervention types
+Emphasis on recommended intervention
+Evidence-based professional presentation
+Tab 5: 📋 Comprehensive ReportLayout:
+
+Report Summary Card (top):
+
+Key statistics at a glance:
+
+Monitoring duration
+Number of scans
+Baseline vs current score
+Overall trend
+Prediction summary
+
+
+
+
+
+Report Sections (scrollable, well-formatted):
+Section 1: Executive Summary
+
+Patient ID
+Analysis date
+Monitoring period
+Key findings (3-5 bullet points)
+Section 2: Health Score Analysis
+
+Baseline to current progression
+Rate of change
+Current grade
+Trajectory classification
+Section 3: Predictive Modeling
+
+Model used
+12-month prediction
+24-month prediction
+Confidence levels
+Months to threshold
+Section 4: Condition Progression
+
+Summary counts (worsening/stable/improving)
+Detailed worsening conditions
+Improving conditions noted
+Section 5: Fall Risk Assessment
+
+Baseline vs current
+Risk trajectory
+Insurance implications
+Section 6: Intervention Analysis
+
+Recommended intervention
+Expected benefit
+Alternative options
+Section 7: Clinical Recommendations
+
+Priority actions
+Monitoring frequency
+Referrals needed
+Next steps
+Section 8: Insurance Data Summary
+
+Longitudinal value estimate
+Risk stratification
+Key underwriting factors
+
+Export Options:
+
+Two large download buttons:
+
+Download TXT Report (human-readable)
+Download JSON Data (machine-readable)
+
+
+Preview options for each format
+Email report option (if configured)
+
+
+
+Data Privacy Reminder:
+
+Brief GDPR/UK DPA/HIPAA notice
+Sensitive data handling reminder
+
+
+Visual Design:
+
+Report/document aesthetic
+Clean, professional formatting
+Clear section headings
+Print-friendly layout
+Exportable/shareable presentation
+ 

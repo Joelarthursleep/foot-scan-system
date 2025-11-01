@@ -1,0 +1,85 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Data files (too large for git)
+data/volumental_cache/
+data/volumental_scans/
+output/
+*.db-journal
+*.db.backup
+
+# Model files (large)
+models/*.h5
+models/*.pb
+models/saved_model/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.log
+
+# Jupyter
+*.ipynb_checkpoints/
+.ipynb_checkpoints/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Backup files
+*.backup
+*.backup_*
+
+# Documentation (keep README)
+DEPLOYMENT.md
+ADVANCED_FEATURES_IMPLEMENTATION.md
+CONTINUOUS_TRAINING_GUIDE.md
+CRITICAL_FIXES_NEEDED.md
+HOW_TO_TRAIN_ML_MODELS.md
+MEDICAL_RESEARCH_VALIDATION_EXPLAINED.md
+ML_TRAINING_AGENT_FIXED.md
+NEXT_STEPS_ROADMAP.md
+PROJECT_DOCUMENTATION.md
+REBUILD_PLAN.md
+
+# Google Cloud files
+.gcloudignore
+Dockerfile
+.dockerignore
+deploy.sh
+
+# Scripts folder (too large)
+scripts/
