@@ -469,16 +469,26 @@ class EnhancedMedicalAnalyzer:
 
     def _generate_training_data(self):
         """Generate synthetic training data for demonstration"""
-        logger.info("Generating synthetic training data for ensemble models...")
+        import os
 
-        n_samples = 1000
+        # Use fewer samples on Streamlit Cloud to speed up initialization
+        is_streamlit_cloud = os.getenv('STREAMLIT_SHARING_MODE') is not None or \
+                           'streamlit.app' in os.getenv('HOSTNAME', '')
+
+        n_samples = 100 if is_streamlit_cloud else 1000  # Reduce from 1000 to 100 on Streamlit Cloud
+        logger.info(f"Generating synthetic training data for ensemble models (n_samples={n_samples})...")
+
         n_features = len(self.feature_extractor.feature_names)
 
-        conditions = [
-            'collapsed_arch', 'plantar_fasciitis', 'swollen_feet',
-            'hammer_toe', 'claw_toe', 'overlapping_toes', 'mortons_toe',
-            'gout', 'flat_feet'
-        ]
+        # Use fewer conditions on Streamlit Cloud to speed up initialization
+        if is_streamlit_cloud:
+            conditions = ['collapsed_arch', 'plantar_fasciitis', 'flat_feet']  # Train only 3 most common
+        else:
+            conditions = [
+                'collapsed_arch', 'plantar_fasciitis', 'swollen_feet',
+                'hammer_toe', 'claw_toe', 'overlapping_toes', 'mortons_toe',
+                'gout', 'flat_feet'
+            ]
 
         for condition in conditions:
             # Generate synthetic feature data
