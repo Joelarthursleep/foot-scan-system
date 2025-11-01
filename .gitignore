@@ -30,6 +30,7 @@ ENV/
 # Data files (too large for git)
 data/volumental_cache/
 data/volumental_scans/
+data/foot_conditions_knowledge_base.json
 output/
 *.db-journal
 *.db.backup
