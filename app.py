@@ -1074,7 +1074,11 @@ class FootScanSystemUI:
         if patient_history_context:
             history_records = patient_history_context.get("history_records", []) or []
 
+        import streamlit as st_progress
+        progress_placeholder = st_progress.empty()
+
         for foot_side, key in [("Left", "left"), ("Right", "right")]:
+            progress_placeholder.info(f"Processing {foot_side} foot...")
             foot_data = foot_pair_data.get(key)
             if not foot_data:
                 continue
@@ -1084,17 +1088,20 @@ class FootScanSystemUI:
             if vertices is None or faces is None:
                 continue
 
+            progress_placeholder.info(f"Creating point cloud for {foot_side} foot...")
             point_cloud, _ = self.point_cloud_processor.process_scan(vertices, faces)
             segmentation = self.point_cloud_processor.segment_pointcloud(point_cloud)
             if segmentation is None:
                 segmentation = np.zeros(len(point_cloud), dtype=int)
 
+            progress_placeholder.info(f"Running AI analysis on {foot_side} foot (this may take 30-60 seconds)...")
             enhanced_conditions, side_risk = self.enhanced_analyzer.analyze_with_risk_assessment(
                 point_cloud,
                 segmentation,
                 patient_profile,
                 additional_data={"foot_side": key}
             )
+            progress_placeholder.info(f"Completed {foot_side} foot analysis!")
 
             merged_risk_assessments = self._merge_risk_assessments(merged_risk_assessments, side_risk)
 
