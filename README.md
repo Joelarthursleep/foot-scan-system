@@ -1,6 +1,10 @@
-# Foot Scan to Custom Last System
+# Foot Scan System Dashboard
 
-An automated system for converting Volumental LiDAR foot scans into customized shoe lasts with 3D-printed composite material additions for anatomical variations.
+A comprehensive medical-grade foot scanning and analysis system with AI-powered risk assessment, clinical recommendations, and insurance reporting.
+
+## Live Demo
+
+Deployed on Streamlit Cloud: [Coming Soon]
 
 ## System Architecture
 
@@ -27,35 +31,67 @@ foot-scan-system/
 
 ## Key Features
 
-- **Automatic Segmentation**: 22-region foot segmentation using modified PointNet
-- **Anatomical Detection**: Identifies bunions, high insteps, arch variations
-- **Last Matching**: Intelligent matching to base last inventory
-- **3D Print Generation**: Creates TPU buildup instructions for customization
-- **Complete Pipeline**: End-to-end from scan to production-ready files
+### Clinical Analysis
+- **AI Risk Assessment**: Multi-model ensemble for predicting foot conditions
+- **Medical Research Integration**: Evidence-based diagnosis using 100+ clinical studies
+- **Condition Detection**: Identifies bunions, hammertoes, pes planus, pes cavus, plantar fasciitis, and more
+- **Temporal Analysis**: Track progression of conditions over time
+- **Early Warning System**: Predictive alerts for developing conditions
+
+### Professional Reporting
+- **Insurance Reports**: ICD-10 coded reports with cost estimates
+- **Clinical Summaries**: Comprehensive patient reports with visualizations
+- **Last Matching**: AI-powered shoe last recommendations with medical accommodations
+- **3D Visualization**: Interactive foot scan viewing and measurements
+
+### Data Management
+- **Patient Records**: SQLite-based patient history tracking
+- **Baseline Comparisons**: Compare against healthy population baselines
+- **Export Capabilities**: PDF reports, CSV data exports
+- **Secure Storage**: HIPAA-compliant data handling
 
 ## Technology Stack
 
-- **Deep Learning**: TensorFlow/Keras with PointNet architecture
-- **3D Processing**: Open3D, Trimesh, PyMesh
-- **Database**: PostgreSQL with PostGIS
-- **API**: FastAPI
-- **3D Printing**: Custom G-code generation
+- **Frontend**: Streamlit
+- **ML Framework**: Scikit-learn (Random Forest, XGBoost, SVM ensemble)
+- **3D Processing**: Trimesh
+- **Computer Vision**: OpenCV
+- **Database**: SQLite with SQLAlchemy
+- **Data Science**: Pandas, NumPy, SciPy
+- **Visualization**: Plotly
 
-## Performance Targets
+## Quick Start
 
-- Scan processing: <30 seconds
-- Segmentation accuracy: >85% IoU
-- Size recommendation: 90% first-time fit success
-- G-code generation: <2 minutes
+### Local Development
 
-## Installation
+```bash
+# Clone the repository
+git clone https://github.com/[your-username]/foot-scan-system.git
+cd foot-scan-system
 
-See `docs/installation.md` for detailed setup instructions.
+# Install dependencies
+pip install -r requirements.txt
 
-## Usage
+# Run the dashboard
+streamlit run app.py
+```
 
-1. Upload Volumental scan files (OBJ + JSON)
-2. System performs automatic analysis
-3. Review recommendations and customizations
-4. Generate 3D printing files
-5. Print TPU modifications on base last
+### Streamlit Cloud Deployment
+
+This app is configured for one-click deployment to Streamlit Cloud:
+
+1. Fork this repository
+2. Sign up at https://share.streamlit.io
+3. Connect your GitHub account
+4. Select this repository
+5. Deploy!
+
+## System Requirements
+
+- Python 3.10+
+- 4GB RAM minimum
+- Modern web browser (Chrome, Firefox, Safari recommended)
+
+## Medical Disclaimer
+
+This system is designed as a clinical decision support tool and should not replace professional medical diagnosis. Always consult with qualified healthcare providers for medical advice.
