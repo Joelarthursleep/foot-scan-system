@@ -935,16 +935,18 @@ class FootScanSystemUI:
 
         # Enhanced analyzer
         if getattr(self, "enhanced_analyzer", None) is None:
-            st.info("Loading Enhanced AI models (first time only - this may take 30-60 seconds)...")
             try:
+                print("Loading Enhanced AI models...")
                 self.enhanced_analyzer = EnhancedMedicalAnalyzer(site_id="streamlit_dashboard")
                 st.session_state['enhanced_analyzer'] = self.enhanced_analyzer
-                st.success("Enhanced AI models loaded successfully!")
+                print("Enhanced AI models loaded successfully!")
             except Exception as e:
-                st.error(f"Failed to load Enhanced AI models: {e}")
+                print(f"Failed to load Enhanced AI models: {e}")
                 import traceback
                 traceback.print_exc()
-                return False
+                # Don't return False - just set to None and continue
+                self.enhanced_analyzer = None
+                st.session_state['enhanced_analyzer'] = None
         else:
             self.enhanced_analyzer = st.session_state.get('enhanced_analyzer', self.enhanced_analyzer)
 
