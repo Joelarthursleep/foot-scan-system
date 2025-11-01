@@ -1094,14 +1094,32 @@ class FootScanSystemUI:
             if segmentation is None:
                 segmentation = np.zeros(len(point_cloud), dtype=int)
 
-            progress_placeholder.info(f"Running AI analysis on {foot_side} foot (this may take 30-60 seconds)...")
-            enhanced_conditions, side_risk = self.enhanced_analyzer.analyze_with_risk_assessment(
-                point_cloud,
-                segmentation,
-                patient_profile,
-                additional_data={"foot_side": key}
-            )
-            progress_placeholder.info(f"Completed {foot_side} foot analysis!")
+            progress_placeholder.info(f"Running AI analysis on {foot_side} foot...")
+
+            # Check if running on Streamlit Cloud (limited resources)
+            # Streamlit Cloud sets STREAMLIT_SHARING_MODE or we can detect by hostname
+            import os
+            is_streamlit_cloud = os.getenv('STREAMLIT_SHARING_MODE') is not None or \
+                               'streamlit.app' in os.getenv('HOSTNAME', '')
+
+            try:
+                if is_streamlit_cloud:
+                    progress_placeholder.warning(f"Running in optimized mode for Streamlit Cloud - some advanced features may be limited")
+
+                enhanced_conditions, side_risk = self.enhanced_analyzer.analyze_with_risk_assessment(
+                    point_cloud,
+                    segmentation,
+                    patient_profile,
+                    additional_data={"foot_side": key}
+                )
+                progress_placeholder.success(f"Completed {foot_side} foot analysis!")
+            except Exception as e:
+                progress_placeholder.error(f"Error analyzing {foot_side} foot: {e}")
+                import traceback
+                print(f"Full error trace for {foot_side} foot:")
+                traceback.print_exc()
+                enhanced_conditions = {}
+                side_risk = {}
 
             merged_risk_assessments = self._merge_risk_assessments(merged_risk_assessments, side_risk)
 
